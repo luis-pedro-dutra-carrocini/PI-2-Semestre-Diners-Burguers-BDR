@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    
+    <!-- Importando CSS-->
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/cadastrar-login.css" />
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+    
+    <!-- Icone na página -->
+    <link rel="icon" href="./images/logos/logo_diner.png" type="img/jpg">
+
+    <!-- Importando Icones para a página-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+  </head>
+  <body>
+    <section class="menu-principal">
+      <div class="menu container">
+        <img src="./images/logos/logo_diner.png" alt="logo" />
+
+        <nav>
+          <ul class="menu-info">
+            <li><a href="index.html" class="menu-item">Início</a></li>
+            <li><a href="sobre.html" class="menu-item">Sobre nós</a></li>
+            <li><a href="cardapio.html" class="menu-item">Cardápio</a></li>
+            <li><a href="contato.html" class="menu-item">Contato</a></li>
+          </ul>
+        </nav>
+
+        <div class="mobile-menu-icon">
+          <button class="mobile-menu-icon-button">
+            <img src="./images/icons/menu.svg" alt="" class="icon" />
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-menu">
+        <div class="mobile-menu-close">
+          <button class="mobile-menu-close-btn">X</button>
+        </div>
+        <ul class="menu-info">
+          <li><a href="index.html" class="menu-item">Início</a></li>
+          <li><a href="sobre.html" class="menu-item">Sobre nós</a></li>
+          <li><a href="cardapio.html" class="menu-item">Cardápio</a></li>
+          <li><a href="contato.html" class="menu-item">Contato</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="overlay hidden"></div>
+    <br>
+
+    <center>
+    <div class="form-login">
+        <div>
+          <br>
+          <h2>LOGIN</h2><br>
+          <form action="" name="f1">
+              <label for="email">Email</label><br>
+              <span class="input-group-text"><i class="fa fa-envelope" style="color: #f26820;"></i></span>
+              <input type="email" name="email" id="email" class="form-login-inputs" maxlength="200" onblur="validacaoEmail(f1.email, 0)"><br>
+              <p id="msgemail" class="msg"></p><br>
+
+              <label for="senha">Senha</label><br>
+              <span class="input-group-text"><i class="fa fa-lock" style="color: #f26820;"></i></span>
+              <input type="password" name="senha_login" id="senha_login" class="form-login-senha" maxlength="30">
+              <i class="bi bi-eye-fill" id="senha_login_hide" style="color: #f26820;" title='Mostrar Senha' onclick="mostrar_senha('senha_login', 'senha_login_hide')"></i>
+              <br><br>
+
+              <p style="color: white; text-align: center; font-size: 18px;">Não é cadastrado? <a href="cadastrar.html" style="color: blueviolet;">Cadastre-se</a></p><br>
+              <div class="button" onclick="entrar(f1.email, f1.senha_login)">Entrar</div>
+              <p id="msgerrologin" class="msg"></p><br>
+              <br><br>
+            </form>
+        </div>
+    </div>
+    </center>
+
+    <br><br>
+    <footer>
+        <p>© Copyright by <a href="https://github.com/luis-pedro-dutra-carrocini" target="_blank" >Luís Pedro</a>
+        </p>
+    </footer>
+    <script src="./js/geral.js"></script>
+    <script src="./js/cadastrar-login.js"></script>
+  </body>
+</html>

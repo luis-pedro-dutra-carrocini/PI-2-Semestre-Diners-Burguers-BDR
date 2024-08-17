@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fazer Pedido</title>
+    <link rel="icon" href="./images/logos/logo_diner.png" type="img/jpg" />
+
+    <!-- Importando CSS-->
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/fazerpedido.css" />
+
+    <!-- Importando Icones para a página-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+  </head>
+  <body>
+  <header>
+    <div class="overlay hidden"></div>
+    <section class="menu-principal">
+      <div class="menu container">
+        <img src="./images/logos/logo_diner.png" alt="logo" />
+
+        <nav>
+          <ul class="menu-info">
+            <li><a href="index.html" class="menu-item">Início</a></li>
+            <li><a href="sobre.html" class="menu-item">Sobre nós</a></li>
+            <li><a href="cardapio.html" class="menu-item">Cardápio</a></li>
+            <li><a href="contato.html" class="menu-item">Contato</a></li>
+          </ul>
+        </nav>
+        
+        <div class="menu-openner" onclick="AbrirCarrinho()"><span>0</span>🛒</div>
+        <button class="button" onclick="window.location.href = 'login.html'">Entrar</button>
+
+        <div class="mobile-menu-icon">
+          <button class="mobile-menu-icon-button" id="Menu-Mobile">
+            <img src="./images/icons/menu.svg" alt="" class="icon"/>
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-menu">
+        <div class="mobile-menu-close">
+          <button class="mobile-menu-close-btn">X</button>
+        </div>
+        <ul class="menu-info">
+          <li><a href="index.html" class="menu-item">Início</a></li>
+          <li><a href="sobre.html" class="menu-item">Sobre nós</a></li>
+          <li><a href="cardapio.html" class="menu-item">Cardápio</a></li>
+          <li><a href="contato.html" class="menu-item">Contato</a></li>
+        </ul>
+
+        <button class="button" onclick="window.location.href = 'login.html'">Entrar</button>
+      </div>
+    </section>
+  </header>
+  
+  <main>
+    <h1 class="produtos-h1">Burgers <span class="exclamacao-decoration">!</span></h1>
+    <div class="burgers-area"></div>
+    <br><br>
+
+    <h1 class="produtos-h1">Drinks <span class="exclamacao-decoration">!</span></h1>
+    <div class="bebidas-area"></div>
+    <br><br>
+
+    <h1 class="produtos-h1">Sobremesas <span class="exclamacao-decoration">!</span></h1>
+    <div class="sobremesas-area"></div>
+  </main>
+
+  <div class="models">
+    <div class="produto-item">
+        <a href="">
+            <div class="produto-item--img"><img src="" /></div>
+            <div class="produto-item--add">+</div>
+        </a>
+        <div class="produto-item--price">R$ --</div>
+        <div class="produto-item--name">--</div>
+        <div class="produto-item--desc">--</div>
+    </div>
+    <div class="cart--item">
+        <img src="" />
+        <div class="cart--item-nome">--</div>
+        <div class="cart--item--qtarea">
+            <button class="cart--item-qtmenos">-</button>
+            <div class="cart--item--qt">1</div>
+            <button class="cart--item-qtmais">+</button>
+        </div>
+    </div>
+</div>
+    <aside>
+        <div class="cart--area">
+            <div class="menu-closer" onclick="FecharCarrinho()">❌</div>
+            <br><br>
+            <h1>Seus Produtos</h1>
+            <div class="cart"></div>
+            <div class="cart--details">
+                <div class="cart--totalitem subtotal">
+                    <span>Subtotal</span>
+                    <span>R$ --</span>
+                </div>
+                <div class="cart--totalitem desconto">
+                    <span>Desconto (-0%)</span>
+                    <span>R$ --</span>
+                </div>
+                <div class="cart--totalitem total big">
+                    <span>Total</span>
+                    <span>R$ --</span>
+                </div>
+                <div class="cart--finalizar" onclick="finalizarCompra()">Finalizar a compra</div>
+            </div>
+        </div>
+    </aside>
+  <div class="produtoWindowArea">
+      <div class="produtoWindowBody">
+          <div class="produtoInfo--cancelMobileButton" onclick="closeModal()">Voltar</div>
+          <div class="produtoBig">
+              <img src="" />
+          </div>
+          <div class="produtoInfo">
+              <h1>--</h1>
+              <div class="produtoInfo--desc">--</div>
+              <div class="produtoInfo--sizearea">
+                  <div class="produtoInfo--sector">Tipo</div>
+                  <div class="produtoInfo--sizes">
+                      <div data-key="0" class="produtoInfo--size" id="Tamanho_P" onclick="SizeProduto('Tamanho_P', 0)">(P) <span>--</span></div>
+                      <div data-key="1" class="produtoInfo--size" id="Tamanho_M" onclick="SizeProduto('Tamanho_M', 1)">(M) <span>--</span></div>
+                      <div data-key="2" class="produtoInfo--size selected" id="Tamanho_G" onclick="SizeProduto('Tamanho_G', 2)">(G) <span>--</span></div>
+                  </div>
+              </div>
+              <div class="produtoInfo--pricearea">
+                  <div class="produtoInfo--sector">Preço</div>
+                  <div class="produtoInfo--price">
+                      <div class="produtoInfo--actualPrice">R$ --</div>
+                      <div class="produtoInfo--qtarea">
+                          <button class="produtoInfo--qtmenos" onclick="MenosUm()">-</button>
+                          <div class="produtoInfo--qt">1</div>
+                          <button class="produtoInfo--qtmais" onclick="MaisUm()">+</button>
+                      </div>
+                  </div>
+              </div>
+              <div class="produtoInfo--addButton" onclick="AddProduto()">Adicionar ao carrinho</div>
+              <div class="produtoInfo--cancelButton" onclick="closeModal()">Cancelar</div>
+          </div>
+      </div>
+  </div>
+
+    <a href="https://wa.me/5516999999999" target="_blank">
+      <img
+        class="logo-wpp"
+        src="./images/icons/icons8-whatsapp.svg"
+        alt=""
+        srcset=""
+      />
+    </a>
+
+    <script src="./js/geral.js"></script>
+    <script src="./js/sabores.js"></script>
+    <script src="./js/fazerpedido.js"></script>
+  </body>
+</html>

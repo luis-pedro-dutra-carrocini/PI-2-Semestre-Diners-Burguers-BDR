@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastrar-se</title>
+
+    <!-- Importando CSS-->
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/cadastrar-login.css" />
+
+    <!-- API para a mascara do telefone -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.11/jquery.mask.min.js"></script>
+
+    <script src="https://unpkg.com/scrollreveal"></script>
+
+    <!-- Icone na página -->
+    <link rel="icon" href="./images/logos/logo_diner.png" type="img/jpg">
+
+    <!-- Importando Icones para a página-->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
+    
+  </head>
+  <body>
+    <section class="menu-principal">
+      <div class="menu container">
+        <img src="./images/logos/logo_diner.png" alt="logo" />
+
+        <nav>
+          <ul class="menu-info">
+            <li><a href="index.html" class="menu-item">Início</a></li>
+            <li><a href="sobre.html" class="menu-item">Sobre nós</a></li>
+            <li><a href="cardapio.html" class="menu-item">Cardápio</a></li>
+            <li><a href="contato.html" class="menu-item">Contato</a></li>
+          </ul>
+        </nav>
+
+
+
+        <div class="mobile-menu-icon">
+          <button class="mobile-menu-icon-button">
+            <img src="./images/icons/menu.svg" alt="" class="icon" />
+          </button>
+        </div>
+      </div>
+
+      <div class="mobile-menu">
+        <div class="mobile-menu-close">
+          <button class="mobile-menu-close-btn">X</button>
+        </div>
+        <ul class="menu-info">
+          <li><a href="index.html" class="menu-item">Início</a></li>
+          <li><a href="sobre.html" class="menu-item">Sobre nós</a></li>
+          <li><a href="cardapio.html" class="menu-item">Cardápio</a></li>
+          <li><a href="contato.html" class="menu-item">Contato</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="overlay hidden"></div>
+    <br>
+
+    <center>
+    <div class="form-login">
+        <div>
+          <br>
+          <h2>CADASTRAR-SE</h2><br>
+            <form action="" name="f1">
+              <label for="nome">Nome</label><br>
+              <span class="input-group-text"><i class="bi bi-person-fill" style="color: #f26820;"></i></span>
+              <input type="text" name="nome" id="nome" class="form-login-inputs" maxlength="70" required>
+              <br><br>
+
+              <label for="email">Email</label><br>
+              <span class="input-group-text"><i class="fa fa-envelope" style="color: #f26820;"></i></span>
+              <input type="email" name="email" id="email" class="form-login-inputs" maxlength="256" onblur="validacaoEmail(f1.email, 0)" required><br>
+              <p id="msgemail" class="msg"></p><br>
+
+              <div class="ladoalado_cadastrar" style="width: 250px;">
+                <label for="email">Telefone</label><br>
+                <span class="input-group-text"><i class="bi bi-telephone-fill" style="color: #f26820;"></i></span>
+                <input type="text" name="telefone" id="telefone" class="form-login-inputs" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}" style="width: 185px;" placeholder="(99) 9999-99999" required maxlength="15">
+              </div>
+
+              <div class="ladoalado_cadastrar" style="width: 250px;">
+                <label for="email">Celular</label><br>
+                <span class="input-group-text"><i class="bi bi-phone-fill" style="color: #f26820;"></i></span>
+                <input type="text" name="celular" id="celular" class="form-login-inputs" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}" style="width: 185px;" placeholder="(99) 9999-99999" required maxlength="15">
+              </div>
+              <br>
+
+              <fieldset style="color: white; border: 2px solid #f26820; width: 100%;">
+                <legend style="font-size: 23px; text-align: center; width: 150px;">Endereço</legend>
+                <br>
+                
+                <div class="ladoalado_cadastrar" style="width: 150px; margin-left: 10px;">
+                  <label for="cep">CEP</label><br>
+                  <input type="text" name="cep" id="cep" class="form-login-inputs" pattern="\([0-9]{2}\)[\s][0-9]{4}-[0-9]{4,5}" placeholder="99999-999" style="width: 145px;" onblur="dados_cep(f1.cep)" required maxlength="9">
+                </div>
+
+                <div class="ladoalado_cadastrar" style="width: 300px; margin-left: 10px;">
+                  <label for="cidade">Cidade</label><br>
+                  <input type="text" name="cidade" id="cidade" class="form-login-inputs" style="width: 290px;" required readonly maxlength="50">
+                </div>
+
+                <div class="ladoalado_cadastrar" style="width: 55px; margin-left: 10px;">
+                  <label for="uf">UF</label><br>
+                  <input type="text" name="uf" id="uf" class="form-login-inputs" style="width: 50px;" required readonly maxlength="2">
+                </div>
+
+                <div class="ladoalado_cadastrar" style="width: 250px; margin-left: 10px;">
+                  <label for="bairro">Bairro</label><br>
+                  <input type="text" name="bairro" id="bairro" class="form-login-inputs" style="width: 245px;" required maxlength="30">
+                </div>
+
+                <div class="ladoalado_cadastrar" style="width: 250px; margin-left: 10px;">
+                  <label for="rua">Rua</label><br>
+                  <input type="text" name="rua" id="rua" class="form-login-inputs" style="width: 245px;" required maxlength="30">
+                </div>
+
+                <div class="ladoalado_cadastrar" style="width: 100px; margin-left: 10px;">
+                  <label for="numero">Número</label><br>
+                  <input type="number" name="numero" id="numero" class="form-login-inputs" style="width: 95px;" required>
+                </div>
+                
+                <div class="ladoalado_cadastrar" style="width: 250px; margin-left: 10px;">
+                  <label for="complemento">Complemento (Opcional)</label><br>
+                  <input type="text" name="complemento" id="complemento" class="form-login-inputs" style="width: 245px;" maxlength="20">
+                </div><br>
+                <p id="msgcep" class="msg"></p><br>
+              </fieldset>
+              <br>
+
+              <label for="senha">Senha</label><br>
+              <span class="input-group-text"><i class="fa fa-lock" style="color: #f26820;"></i></span>
+              <input type="password" name="senha_cadastro" id="senha_cadastro" class="form-login-senha" maxlength="30" required onblur="validasenha(f1.senha_cadastro)">
+              <i class="bi bi-eye-fill" id="senha_cadastro_hide" style="color: #f26820;" title='Mostrar Senha' onclick="mostrar_senha('senha_cadastro', 'senha_cadastro_hide')"></i>
+              <br>
+              <p class="msg" id="msgsenha"></p>
+              <br>
+
+              <label for="senha">Confirmar Senha</label><br>
+              <span class="input-group-text"><i class="fa fa-lock" style="color: #f26820;"></i></span>
+              <input type="password" name="consenha_cadastro" id="consenha_cadastro" class="form-login-senha" maxlength="30" required onblur="validaconsenha(f1.senha_cadastro, f1.consenha_cadastro)">
+              <i class="bi bi-eye-fill" id="consenha_cadastro_hide" style="color: #f26820;" title='Mostrar Senha' onclick="mostrar_senha('consenha_cadastro', 'consenha_cadastro_hide')"></i>
+              <br>
+              <p class="msg" id="msgconsenha"></p>
+              <br>
+
+              <p style="color: white; text-align: center; font-size: 18px;">Já é cadastrado? <a href="login.html" style="color: blueviolet;">Entrar</a></p><br>
+
+            </form>
+        </div>
+        <div class="button" onclick="cadastrar(f1.email, f1.senha_cadastro, f1.consenha_cadastro, f1.cep)">Cadastrar-se</div>
+        <p class="msg" id="msgerrocad"></p>
+        <br>
+    </div>
+    </center>
+
+    <br><br>
+    <footer>
+      <p>© Copyright by <a href="https://github.com/luis-pedro-dutra-carrocini" target="_blank" >Luís Pedro</a>
+      </p>
+    </footer>
+    <script src="./js/geral.js"></script>
+    <script src="./js/cadastrar-login.js"></script>
+  </body>
+</html>
