@@ -1,6 +1,6 @@
-# PI 1° Semestre - Diner's Burguers (Um site para uma Hamburgueria)
+# PI 2° Semestre - Diner's Burguers (Um site para uma Hamburgueria) - Com Banco de Dados Relacional
 
-Esse projeto é o primeiro PI (Projeto Interdisciplinar) do curso DSM (Desenvolvimento de Softwares Multi-Plataformas) da Faculdade de Tecnologia Fatec Franca Dr. Thomaz Novelino. Seu intuito é unir os conhecimentos adquiridos nas principais disciplinas do primeiro semestre, Engenharia de Software I, Design Digital e Desenvolvimento Web I, criando um site de vendas de uma hamburgueria fictícia.  Atualmente o site foi desenvolvido com as linguagens HTML5, CSS3 e JavaScript, sendo somente a parte visual. Posteriormente, no segundo semestre, será implementado o banco de dados, tornando-o funcional.
+Esse projeto é o segundo PI (Projeto Interdisciplinar) do curso DSM (Desenvolvimento de Softwares Multi-Plataformas) da Faculdade de Tecnologia Fatec Franca Dr. Thomaz Novelino, sendo uma continuação do primeiro PI. Seu intuito é unir os conhecimentos adquiridos nas principais disciplinas do segundo semestre, Engenharia de Software II, Banco de Dados Relacional e Desenvolvimento Web II, criando um site de vendas e de administração de uma hamburgueria fictícia.  Atualmente o site foi desenvolvido com as linguagens HTML5, CSS3, JavaScript, Node JS e React, sendo a parte visual e funcional do sitema.
 
 ## 📄 Descrição
 
@@ -72,17 +72,18 @@ Usuário Cadastrado:
 
 ## 📃 Obter cópia
 
-Para obter uma cópia basta baixar todos os arquivos presentes nesse repositório, e executar a página INDEX.HTML em um navagador (Chrome, Edge, FireFox, etc.).
+Para obter uma cópia basta baixar todos os arquivos presentes nesse repositório, além de executar o código SQL do Banco de Dados em um SGBD (Utilizado foi p MySQL), e executar a página INDEX.HTML em um navagador (Chrome, Edge, FireFox, etc.).
 
 
 ## 📋 Pré-requisitos
 
-Para que o site possa apresentar pleno funcionamento é necessário um navegador com acessoa a Internet, e que suporte JavaScript.
+Para que o site possa apresentar pleno funcionamento é necessário um navegador com acessoa a Internet, e que suporte JavaScript. Além de SQGB local ou hospedado na nuvem para Banco de Dados.
 
 
 ## 🔧 Instalação
 
 * Baixe os arquivos e pastas contidas nesse repositório e os coloque em uma pasta;
+* Execute o código do Banco de Dados (BD-PI2.sql) em um SGBD (Sistema Gerenciador de Banco de Dados), Online ou Local - Recomendável o MySQL;
 * Obtenha acesso a Internet;
 * Deixe ativado o JavaScript no seu navegador;
 * Execute o arquivo INDEX.HTML;
@@ -92,12 +93,14 @@ Para que o site possa apresentar pleno funcionamento é necessário um navegador
 Ferramentas:
 * Visual Studio Code- Editor de Código-Fonte;
 * Photoshop - Edição das imagens utilizadas;
+* MySQL - Sistema Gerenciador de Banco de Dados;
 
 Linguagens, Frameworks e API's:
 * Bootstrap- O framework web usado;
 * HTML5 - Linguagem de Marcação;
 * Java Script - Linguagem de Programação
 * CSS - Linguagem Web de Formatação;
+* Node JS - Utilizado para a interligação da página com o Banco de Dados;
 * API ViaCep - Utilizada pa a obtenção dos dados de CEP;
 * API WhatsApp - Utilizada para enviar mensagens; 
 
@@ -111,11 +114,11 @@ Linguagens, Frameworks e API's:
 
 ## 🎁 Expressões de gratidão
 
-* Agradecemos a todos os professores que nos ministraram o curso durante o primeiro semestre, especialmente aos professores que nos ministraram as disciplinas fundamentais para o desenvolvimento desse projeto: 
-- **Prof. Fernando** - Engenharia de Software I;
-- **[Prof. Leonardo](https://github.com/LeonardoRaiz)** - Design Digital;
-- **[Prof. Márcio](https://github.com/marciofunes)** - Desenvolvimento WEB I;
+* Agradecemos a todos os professores que nos ministraram o curso durante o segundo semestre, especialmente aos professores que nos ministraram as disciplinas fundamentais para o desenvolvimento desse projeto: 
+- **Prof. Jorge** - Engenharia de Software II;
+- **Prof. Neto** - Desenvolvimento WEB II;
+- **Prof. Mistério** - Banco de Dados Relacional;
 
 ---
-Esse site foi desenvolvido no início de nossa carreira, por isso temos orgulho desse projeto, por ser o nosso primeiro, então releve um pouco o nosso código de iniciante rsrsrs. 
+Esse site foi desenvolvido no início de nossas carreiras, por isso temos orgulho desse projeto, por ser um dos nossos primeiros, então releve um pouco o nosso código de iniciante rsrsrs. 
 Esperamos que goste e lhe ajude em algum projeto. ❤️😊
