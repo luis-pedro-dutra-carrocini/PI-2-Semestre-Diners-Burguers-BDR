@@ -85,6 +85,7 @@ create table Pedidos_Produtos(
  ID_Tamanho int not null,
  Qt_Produto int not null,
  Valor_Produto double not null,
+ Status_Produto varchar(15) not null,
  foreign key(ID_Tamanho) references Tamanhos(ID_Tamanho),
  foreign key(ID_Pedido) references Pedidos(ID_Pedido),
  foreign key(ID_Produto) references Produtos(ID_Produto),
