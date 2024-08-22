@@ -36,38 +36,38 @@ Usuário Cadastrado:
 
 ### Página Inicial
 
-<img src="/prints/print1.png">
-<img src="/prints/print2.png">
-<img src="/prints/print3.png">
-<img src="/prints/print4.png">
-<img src="/prints/print5.png">
+<img src="/public/prints/print1.png">
+<img src="/public/prints/print2.png">
+<img src="/public/prints/print3.png">
+<img src="/public/prints/print4.png">
+<img src="/public/prints/print5.png">
 
 ### Fazer Pedido
 
-<img src="/prints/print6.png">
-<img src="/prints/print7.png">
-<img src="/prints/print8.png">
+<img src="/public/prints/print6.png">
+<img src="/public/prints/print7.png">
+<img src="/public/prints/print8.png">
 
 ### Login e Cadastro
-<img src="/prints/print9.png">
-<img src="/prints/print10.png">
+<img src="/public/prints/print9.png">
+<img src="/public/prints/print10.png">
 
 ### Sobre nós
-<img src="/prints/print11.png">
-<img src="/prints/print12.png">
-<img src="/prints/print13.png">
+<img src="/public/prints/print11.png">
+<img src="/public/prints/print12.png">
+<img src="/public/prints/print13.png">
 
 ### Cardápio
-<img src="/prints/print14.png">
+<img src="/public/prints/print14.png">
 
 ### Contato
-<img src="/prints/print15.png">
+<img src="/public/prints/print15.png">
 
 ### Responsividade
 
-<img src="/prints/print16.png">
-<img src="/prints/print17.png">
-<img src="/prints/print18.png">
+<img src="/public/prints/print16.png">
+<img src="/public/prints/print17.png">
+<img src="/public/prints/print18.png">
 <br>
 
 ## 📃 Obter cópia
