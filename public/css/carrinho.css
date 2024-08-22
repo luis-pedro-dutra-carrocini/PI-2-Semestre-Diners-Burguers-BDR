@@ -1,0 +1,249 @@
+.menu-info .bi-cart4{
+    color: black;
+    background-color: #f26820;
+    padding: 5px;
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    margin: 0;
+}
+
+.menu-info .bi-person-fill{
+    color: #F26820;
+    padding: 5px;
+    border-radius: 20px;
+    width: 40px;
+    height: 40px;
+    border: solid 2px #F26820;
+    text-align: center;
+    margin: 0px;
+}
+
+.menu-info .bi-backspace-reverse{
+    color: #F26820;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    margin: 0px;
+    padding: 5px;
+    margin: 0;
+}
+
+.conteudo-carrinho{
+    padding: 10px;
+    background-color: #fde6c2;
+    width: 99%;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.400);	
+}
+
+.conteudo-carrinho .h2{
+    text-align: center;
+}
+
+.itens-carrinho{
+    padding: 7px;
+    background-color: #fadeb1;
+    text-align: left;
+    border-radius: 15px;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.400);
+    margin-bottom: 15px;
+    min-height: 114px;
+    max-height: none;
+}
+
+.itens-carrinho img{
+    width: 100px;
+    height: 100px;
+    background-color: #ffebcc;
+    border-radius: 15px;
+    padding: 5px;
+}
+
+.itens-carrinho-div-img{
+    width: 15%; 
+    min-width: 100px; 
+    max-width: 100px;
+}
+
+.itens-carrinho-div-descricao{
+    width: 70%; 
+    font-size: 15px;
+    padding: 5px;
+}
+
+.itens-carrinho-div-opcoes{
+    width: 15%; 
+    font-size: 15px; 
+    border-left: solid 2px; 
+    height: 95%; 
+    padding-left: 7px;
+    min-width: 200px;
+}
+
+.itens-carrinho div{
+    display: inline-block;
+    height: 95%;
+    vertical-align: top;
+    margin-right: 0px;
+}
+
+.div-button {
+    padding: 7px 17px;
+    background-color: #f26820;
+    border: none;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    transition: transform 0.5s;
+    margin: 0px;
+    outline: 0px;
+    margin-top: 5px;
+    color: black;
+    text-align: center;
+}
+
+.div-button:hover{
+    background-color: #b14545;
+    color: #faebd7;
+    transform: scale(1.02);
+}
+
+.botoes-modal{
+    position: fixed;
+    bottom: 25px;
+    right: 25px; 
+    padding: 10px 20px;
+    background-color: #f26820;
+    border: none;
+    border-radius: 5px;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    transition: transform 0.5s;
+    margin: 0px;
+    outline: 0px;
+    margin-top: 5px;
+}
+
+.botoes-modal:hover{
+    background-color: #b14545;
+    color: #faebd7;
+    transform: scale(1.1);
+}
+
+.produtos-h1 {
+    font-size: 60px;
+    font-weight: 700;
+    font-family: 'calistoga';
+    color: #1b1b1b;
+    text-align: center;
+    margin: 20px 0;
+
+}
+
+.exclamacao-decoration {
+    color: #f26820;
+}
+
+.produtoscarrinho-area{
+    padding: 20px;
+}
+
+.prodcar{
+    background-color: #1b1b1b;
+    border-radius: 20px;
+    padding: 20px;
+    color: #979696;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.div-imgprod{
+    width: 49%;
+    display: inline-block;
+    max-width: 200px;
+}
+.div-imgprod img{
+    width: 95%;
+    max-height: 200px;
+    object-fit: contain;
+}
+
+.inf-prod{
+    width: 49%;
+    display: inline-block;
+}
+
+.prod-name{
+    color: white;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.mais-prod{
+    width: 30%;
+    display: inline-block;
+    border-left: solid 2px #979696;
+    color: white;
+    padding-left: 7px;
+}
+
+@media (max-width: 1090px){
+    .mais-prod{
+        border-left: none;
+        padding-top: 10px;
+    }
+
+    .inf-prod{
+        width: 70%;
+    }
+}
+
+@media (max-width: 780px){
+    .inf-prod{
+        width: 100%;
+        padding-top: 7px;
+    }
+
+    .div-imgprod{
+        width: 100%;
+    }
+}
+
+.btn-mod-add, .btn-mod-rem{
+    font-size: 15px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 0;
+    cursor: pointer;
+    background-color: white;
+}
+
+.qt-area{
+    background-color: white;
+    border-radius: 3px;
+    padding-left: 3px;
+    padding-right: 3px;
+    width: 100px;
+    text-align: center;
+}
+
+.lbl-quant{
+    font-size: 15px;
+    background-color: white;
+    color: black;
+    height: 50px;
+    width: 50px;
+    padding-left: 5px;
+    padding-right: 5px;
+}

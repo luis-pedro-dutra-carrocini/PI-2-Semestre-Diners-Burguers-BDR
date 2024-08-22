@@ -1,0 +1,79 @@
+.sobre-nos {
+    height: 600px;
+    padding-top: 30px;
+    position: relative;
+}
+.sobre-nos  h1 {
+    font-size: 60px;
+    font-family: 'Calistoga';
+    text-align: center;
+}
+.sobre-nos p {
+    font-size: 15px;
+    line-height: 1.4;
+    margin-top: 15px;
+}
+.sobre {
+    background-color: #1b1b1b;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+
+.sobre .sobre-img {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+}
+
+.sobre-img-fachada {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+    width: 100%;
+    height: 600px;
+    object-fit: cover;
+}
+
+.sobre-img-ambiente {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.sobre-img-externa {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+}
+
+.sobre .sobre-message h1 {
+    padding: 20px 0;
+    color: #faebd7;
+    font-size: 60px;
+    font-family: 'Calistoga';
+    text-align: center;
+    /* letter-spacing: 5px; */
+}
+.message h1{    font-size: 60px;
+    font-family: 'Calistoga';
+    text-align: center;
+
+
+}
+.message p{    font-size: 15px;
+    line-height: 1.4;
+    margin-top: 15px;
+
+}
+.sobre-nos p span {
+    color: #f26820;
+    font-weight: 700;
+}
+span{
+
+    color: #f26820;
+    font-weight: 700;
+
+}
