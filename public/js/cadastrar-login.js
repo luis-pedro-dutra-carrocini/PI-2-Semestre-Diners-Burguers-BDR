@@ -201,7 +201,7 @@ async function validacaoEmail(email) {
       }
 
   } catch (error) {
-      console.error('Erro ao verificar o e-mail:', error);
+      console.log('Erro ao verificar o e-mail:', error);
       return { erroEmail: 1 };
   }
 }
@@ -209,11 +209,42 @@ async function validacaoEmail(email) {
 // Função para validar e cadastrar usuário
 async function cadastrar() {
 
+  // Obtendo o ID do Formulário
+  const form = document.getElementById('formCadUsuario');
+
   // Obtendo os dados do usuário pelo formulário
   // Dados pessoais
   const nome = document.getElementById('nome').value.trim();
   const email = document.getElementById('email').value.trim();
-  const foto = "/caminho/foto.png";
+
+  // Obtendo informações da imagem
+  const fotoInput = document.getElementById('foto_usuario');
+
+  // Obtém o primeiro arquivo (neste caso, a foto)
+  const foto = fotoInput.files[0];
+
+  // Verificando se a imagem foi escolhida
+  if (!foto) {
+
+    // Enviando mensagem de erro
+    document.getElementById('msgfoto').textContent = "Nenhuma Imagem Escolhida!";
+    return;
+  }
+
+  // Tipo do arquivo da foto
+  const tipoFoto = foto.type;
+
+  // Verificando se o tipo de imagem é válido
+  // .jpg, .jpeg, .png, .gif
+  if (tipoFoto != "image/jpeg" && tipoFoto != "image/jpg" && tipoFoto != "image/png" && tipoFoto != "image/gif"){
+
+    // Enviando mensagem de erro
+    document.getElementById('msgfoto').textContent = "Tipo de arquivo Inválido!";
+    return;
+  }
+
+  // Apagando qualquer tipo de mensagem de erro de foto
+  document.getElementById('msgfoto').textContent = "";
 
   // Telefone e Celular
   const telefone = document.getElementById('telefone').value.trim();
@@ -228,9 +259,6 @@ async function cadastrar() {
   const bairro = document.getElementById('bairro').value.trim();
   const rua = document.getElementById('rua').value.trim();
   const numero = document.getElementById('numero').value.trim();
-  const cidade = document.getElementById('cidade').value.trim();
-  const uf = document.getElementById('uf').value.trim();
-  const complemento = document.getElementById('complemento').value.trim();
 
   // Variaveis para executar e receber o resultados das validações das funções
   const emailValidacao = await validacaoEmail(email);
@@ -244,43 +272,12 @@ async function cadastrar() {
       // Verificando se não há campos nulos
       if (nome && bairro && rua && numero && telefone.length == 15 && celular.length == 15) {
 
-          // Executando a função de cadastro
-          fetch('/cadastrar-usuario', {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json'
-              },
+        form.submit();
 
-              // Criando um JSON para evia-lo para o cadastro no bd
-              body: JSON.stringify({ email, nome, senha, foto, nivel: "cliente", status: "ativo", cep, cidade, uf, bairro, rua, numero, complemento, telefone, celular })
-          })
-          .then(response => response.json())
-          .then(data => {
-
-              // Verificando o resultado do cadastro
-              if (data.resposta === 'Erro Cadastro Usuário') {
-                  document.getElementById('msgerrocad').textContent = 'Erro ao Cadastrar o Usuário';
-
-              } else if (data.resposta === 'Erro Consulta ID_Usuario') {
-                document.getElementById('msgerrocad').textContent = 'Erro na Consulta do ID_Usuario';
-
-            } else if (data.resposta === 'Erro Inserção Telefones') {
-                document.getElementById('msgerrocad').textContent = 'Erro na Inserção dos Telefones';
-
-            } else if (data.resposta === 'Ok') {
-                  window.location.href = 'home_cliente.html';
-                  
-              } else {
-                  document.getElementById('msgerrocad').textContent = data.resposta;
-              }
-          })
-          .catch(error => {
-              console.error('Erro:', error);
-          });
       } else {
           document.getElementById('msgerrocad').textContent = "Todos os dados devem ser preenchidos de forma correta!";
       }
   } else {
-      document.getElementById('msgerrocad').textContent = "Todos os dados devem ser preenchidos de forma correta 2!";
+      document.getElementById('msgerrocad').textContent = "Todos os dados devem ser preenchidos de forma correta!";
   }
 }
