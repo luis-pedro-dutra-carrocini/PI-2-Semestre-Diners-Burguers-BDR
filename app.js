@@ -95,10 +95,7 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
     const nivel = 'cliente';
     const status = 'ativo';
     
-    console.log(req.body)
     const foto = req.file ? req.file.filename : null;
-
-    console.log('Nome da foto:', foto);
 
     try {
         if (!foto) {
@@ -141,6 +138,113 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
     } catch (error) {
         throw new Error(error.message);
     }
+});
+
+// Função para verificar o Login (Se o email e senha estão cadastrados e corretos no BD)
+app.post('/verificar-login', async (req, res) => {
+    const { email, senha } = req.body;
+
+    // Inicialize o contador de tentativas e tempo de espera na sessão, se ainda não existir
+    if (!req.session.tentativas) {
+        req.session.tentativas = 0;
+    }
+
+    if (!req.session.bloqueio) {
+        req.session.bloqueio = null;
+    }
+
+    // Definindo limite de tentaivas
+    const limiteTentativas = 5;
+
+    // Definindo o tempo de espera após 5 tentativas erradas (30 Minutos em Milisegundos)
+    const tempoBloqueio = 30 * 60 * 1000;
+
+    // Obtendo o exato momento
+    const agora = Date.now();
+
+    // Verificando se o Usuário está bloqueado
+    if (req.session.bloqueio && agora < req.session.bloqueio) {
+
+        // Tempo restante
+        const tempoRestante = Math.ceil((req.session.bloqueio - agora) / 1000 / 60);
+
+        return res.status(200).json({ validacao: false, tentativas: "bloqueado", tempo: tempoRestante });
+
+    }
+
+    // Verificando se o número de tentativas excedeu o limite
+    if (req.session.tentativas >= limiteTentativas - 1) {
+        req.session.bloqueio = agora + tempoBloqueio;
+        req.session.tentativas =  0;
+        return res.status(200).json({ validacao: false, tentativas: "bloqueado", tempo: 30 });
+    }
+
+    conexao.query('SELECT ID_Usuario, Senha_Usuario FROM Usuarios WHERE Email_Usuario = ?;', [email], async (err, results) => {
+
+        // Verificando se não houve um erro na consulta
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao consultar o banco de dados!' });
+        }
+
+        // Caso o email esteja cadastrado no BD
+        if (results.length > 0) {
+
+            // Obtendo a senha criptografada cadastrada
+            const senha_bd = results[0].Senha_Usuario;
+
+            // Obtendo o ID do Usuário
+            const  ID_Usuario = results[0].ID_Usuario;
+
+            // Verificando se as senhas são iguais
+            const resultado = await bcrypt.compare(senha, senha_bd);
+
+            if (resultado === true) {
+
+                // Zerando o contador de tentativas
+                req.session.tentativas = 0;
+
+                // Iniciando a sessão com o ID do Usuário
+                req.session.clienteID = ID_Usuario;
+
+                return res.status(200).json({ validacao: true });
+
+            }else{
+
+                // Adicionando no contador de tentativas
+                req.session.tentativas += 1;
+
+                if (req.session.tentativas === limiteTentativas - 1) {
+                    return res.status(200).json({ validacao: false, tentativas: "limite" });
+                }else{
+                    return res.status(200).json({ validacao: false });
+                }
+
+            }
+            
+        } else {
+            return res.status(200).json({ validacao: 0 });
+        }
+    });
+});
+
+// Função para validar se a sessão foi iniciada
+app.post('/verificar-sessao', (req, res) => {
+
+    // Verificando se o ID do cliente existe na sessão
+    if (req.session.clienteID) {
+        res.status(200).json({ sessaoIniciada: true, clienteID: req.session.clienteID });
+    } else {
+        res.status(200).json({ sessaoIniciada: false });
+    }
+});
+
+// Função para buscar os dados do cliente
+app.post('/buscar-dados-cliente', (req, res) => {
+
+    // Obtendo o ID do Cliente
+    ID_Cliente = req.session.clienteID;
+    
+    // Buscando os dados relacionados ao ID
 });
 
 // Iniciar o servidor

@@ -60,10 +60,10 @@
         <div>
           <br>
           <h2>LOGIN</h2><br>
-          <form action="" name="f1">
+          <form action="" name="formLoginUsuario">
               <label for="email">Email</label><br>
               <span class="input-group-text"><i class="fa fa-envelope" style="color: #f26820;"></i></span>
-              <input type="email" name="email" id="email" class="form-login-inputs" maxlength="200" onblur="validacaoEmail(f1.email, 0)"><br>
+              <input type="email" name="email" id="email" class="form-login-inputs" maxlength="200" onblur="validacaoEmailLogin(formLoginUsuario.email.value)"><br>
               <p id="msgemail" class="msg"></p><br>
 
               <label for="senha">Senha</label><br>
@@ -73,7 +73,7 @@
               <br><br>
 
               <p style="color: white; text-align: center; font-size: 18px;">Não é cadastrado? <a href="cadastrar.html" style="color: blueviolet;">Cadastre-se</a></p><br>
-              <div class="button" onclick="entrar(f1.email, f1.senha_login)">Entrar</div>
+              <div class="button" onclick="entrar()">Entrar</div>
               <p id="msgerrologin" class="msg"></p><br>
               <br><br>
             </form>

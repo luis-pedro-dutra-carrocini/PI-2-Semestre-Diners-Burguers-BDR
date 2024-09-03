@@ -161,11 +161,11 @@ function validaconsenha(senha, consenha) {
   }
 }
 
-// Função para validação de Email
+// Função para validação de Email da Página de Cadsatrar-se
 async function validacaoEmail(email) {
 
   // Campo para mensagem de erro no email
-  const msgEmail = document.getElementById('msg-email');
+  const msgEmail = document.getElementById('msgemail');
 
   // Extrutura do email
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -281,3 +281,162 @@ async function cadastrar() {
       document.getElementById('msgerrocad').textContent = "Todos os dados devem ser preenchidos de forma correta!";
   }
 }
+
+// Função para validação de Email da Página de Login
+async function validacaoEmailLogin(email) {
+
+    // Campo para mensagem de erro no email
+    const msgEmail = document.getElementById('msgemail');
+  
+    // Extrutura do email
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    // Validando o email
+    if (!regex.test(email)) {
+        msgEmail.textContent = 'E-mail Inválido!';
+        return { erroEmail: 1 };
+    }
+  
+    try {
+  
+        // Executando a função para verificar se o email já não está cadastrado
+        const response = await fetch('/verificar-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+  
+        // Recebendo a resposta da verificação
+        const data = await response.json();
+  
+        // Verificando qual foi a resposta
+        if (data.exists) {
+            msgEmail.textContent = '';
+            return { erroEmail: 0 };
+  
+        } else {
+            msgEmail.textContent = 'E-mail não Cadastrado!';
+            return { erroEmail: 1 };
+        }
+  
+    } catch (error) {
+        msgEmail.textContent = ('Erro ao verificar o e-mail: ', error);
+        return { erroEmail: 1 };
+    }
+  }
+
+  // Função para validar o Login e possívelmente Logar
+async function entrar() {
+  
+    // Obtendo os dados do Login pelo formulário
+    const senha = document.getElementById('senha_login').value.trim();
+    const email = document.getElementById('email').value.trim();
+  
+    // Variavel para executar e receber o resultado da validações de Email
+    const emailValidacao = await validacaoEmailLogin(email);
+  
+    // Verificando os resultados
+    if (emailValidacao.erroEmail === 0){
+
+        // Campo para mensagem de erro no email
+        const msgErroLogin = document.getElementById('msgerrologin');
+        
+        if (senha != ""){
+
+            // Executando a função para verificar se o email e a senha estão corretos
+            try {
+  
+                const response = await fetch('/verificar-login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, senha })
+                });
+
+                 // Recebendo a resposta da verificação
+                const resposta = await response.json();
+
+                // Verificando qual foi a resposta
+                if (!resposta.validacao) {
+
+                    if (resposta.tentativas === "limite"){
+
+                        // Emitindo mensagem de erro, pois a senha está incorreta
+                        msgErroLogin.textContent = 'Senha Incorreta. Você só tem mais uma tentativa!';
+
+                    }else if (resposta.tentativas === "esgotado"){
+
+                        // Emitindo mensagem de erro, pois a senha está incorreta
+                        msgErroLogin.textContent = 'Senha Incorreta. Tentaivas esgotadas. Volte daqui 30 minutos!';
+
+                    }else if (resposta.tentativas === "bloqueado"){
+
+                        // Emitindo mensagem de erro, pois a senha está incorreta
+                        msgErroLogin.textContent = 'Senha Incorreta. Tentaivas esgotadas. Volte daqui ' + resposta.tempo +' minutos!';
+                        
+                    }else{
+
+                        // Emitindo mensagem de erro, pois a senha está incorreta
+                        msgErroLogin.textContent = 'Senha Incorreta!';
+                        
+                    }
+
+                }else if (resposta.validacao){
+
+                    // Emitindo mensagem de erro, pois o email não está cadastrado
+                    window.location.href = "home_cliente.html";
+
+                }else if (resposta.validacao === 0){
+
+                    // Emitindo mensagem de erro, pois o email não está cadastrado
+                    msgErroLogin.textContent = 'E-mail não Cadastrado!';
+
+                }
+          
+            } catch (error) {
+                console.log('Erro ao Fazer Login:', error);
+                return { erroEmail: 1 };
+            }
+            
+        }
+  
+    }else{
+        document.getElementById('msgerrologin').textContent = "Todos os dados devem ser preenchidos de forma correta!";
+    }
+  }
+
+
+  // Função para Verificar se a Sessão foi Iniciada
+  function validaSessao() {
+    fetch('/verificar-sessao', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Resposta
+    })
+    .catch(error => console.error('Erro ao verificar a sessão:', error));
+  };
+
+  // Função para Buscar os Dados do Cliente
+  function consultaDadosCliente() {
+    fetch('/buscar-dados-cliente', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.sessaoIniciada) {
+            window.location.href = '/login.html';
+        }
+    })
+    .catch(error => console.error('Erro ao verificar a sessão:', error));
+  };
