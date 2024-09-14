@@ -14,6 +14,7 @@ const session = require('express-session');
 // Requerindo multer e path (upload de arquivos no servidor)
 const multer = require('multer');
 const path = require('path');
+const { error } = require('console');
 
 // ---- Fim ----
 
@@ -229,7 +230,7 @@ app.post('/verificar-login', async (req, res) => {
 
 // Função para validar se a sessão foi iniciada
 app.post('/verificar-sessao', (req, res) => {
-
+    
     // Verificando se o ID do cliente existe na sessão
     if (req.session.clienteID) {
         res.status(200).json({ sessaoIniciada: true, clienteID: req.session.clienteID });
@@ -241,11 +242,81 @@ app.post('/verificar-sessao', (req, res) => {
 // Função para buscar os dados do cliente
 app.post('/buscar-dados-cliente', (req, res) => {
 
-    // Obtendo o ID do Cliente
-    ID_Cliente = req.session.clienteID;
-    
+    // Obtendo o ID do Cliente da sessão
+    const ID_Cliente = req.session.clienteID;
+
+    // Verificando se o ID do Cliente existe na sessão
+    if (!ID_Cliente) {
+        return res.status(401).json({ error: 'Sessão não iniciada!' });
+    }
+
     // Buscando os dados relacionados ao ID
+    conexao.query('SELECT * FROM Usuarios WHERE ID_Usuario = ?', [ID_Cliente], (err, results) => {
+        // Verificando se houve um erro na consulta
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao consultar o Banco de Dados - Buscando Dados do Usuário!' });
+        }
+
+        // Verificando se o ID do Usuário realmente existe
+        if (results.length > 0) {
+
+            // Consultando para obter os Telefones do Usuário
+            conexao.query('SELECT Telefone FROM Telefones WHERE ID_Usuario = ?', [ID_Cliente], (err, resultado) => {
+                // Verificando se houve um erro na consulta
+                if (err) {
+                    return res.status(500).json({ error: 'Erro ao consultar o Banco de Dados - Buscando Telefones do Usuário!' });
+                }
+
+                // Inicializando variáveis para armazenar telefones
+                let telefone = "";
+                let celular = "";
+
+                // Verificando se há telefones cadastrados
+                if (resultado.length > 0) {
+                    telefone = resultado[0]?.Telefone || "";
+                    celular = resultado[1]?.Telefone || "";
+                }
+
+                // Retornando os dados do cliente para a exibição
+                return res.status(200).json({
+                    existe: true,
+                    nome: results[0].Nome_Usuario,
+                    email: results[0].Email_Usuario,
+                    foto: results[0].Foto_Usuario,
+                    cep: results[0].End_CEP,
+                    cidade: results[0].End_Cidade,
+                    uf: results[0].End_UF,
+                    bairro: results[0].End_Bairro,
+                    rua: results[0].End_Rua,
+                    numero: results[0].End_Numero,
+                    complemento: results[0].End_Complemento,
+                    telefone: telefone,
+                    celular: celular
+                });
+            });
+        } else {
+            return res.status(200).json({ existe: false });
+        }
+    });
 });
+
+// Função para sair da conta
+app.post('/sair-conta', (req, res) => {
+
+    // Destrói a sessão do usuário
+    req.session.destroy(err => {
+        if (err) {
+            return res.status(500).json({ error: 'Erro ao encerrar a sessão!' });
+        }
+
+        // Limpando cookies da sessão
+        res.clearCookie('connect.sid');
+
+        // Redireciona para a página de login ou envia uma resposta de sucesso
+        res.status(200).json({ resultado: true });
+    });
+});
+
 
 // Iniciar o servidor
 app.listen(3000, () => {

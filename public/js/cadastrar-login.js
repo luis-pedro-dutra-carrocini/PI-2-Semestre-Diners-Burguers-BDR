@@ -419,7 +419,11 @@ async function entrar() {
     })
     .then(response => response.json())
     .then(data => {
-        // Resposta
+        
+        // Verificando resposta
+        if (!data.sessaoIniciada){
+            window.location.href = '/login.html';
+        }
     })
     .catch(error => console.error('Erro ao verificar a sessão:', error));
   };
@@ -434,7 +438,53 @@ async function entrar() {
     })
     .then(response => response.json())
     .then(data => {
-        if (!data.sessaoIniciada) {
+
+        // Verificando se o Usuário realmente existe
+        if (data.existe) {
+
+            // Exibindo os dados do Usuário
+            document.getElementById('nome').value = data.nome;
+            document.getElementById('email').value = data.email;
+
+            // Telefones
+            document.getElementById('telefone').value = data.telefone;
+            document.getElementById('celular').value = data.celular;
+
+            // Foto
+            document.getElementById('img_foto').src = "imagens/usuarios/" + data.foto;
+
+            // Endereço
+            document.getElementById('cep').value = data.cep;
+            document.getElementById('cidade').value = data.cidade;
+            document.getElementById('uf').value = data.uf;
+            document.getElementById('bairro').value = data.bairro;
+            document.getElementById('rua').value = data.rua;
+            document.getElementById('numero').value = data.numero;
+            document.getElementById('complemento').value = data.complemento;
+           
+
+        }else{
+            window.location.href = '/login.html';
+        }
+    })
+    .catch(error => console.error('Erro ao verificar a sessão:', error));
+  };
+
+  // Função para encerrar a sessão
+  function encerrarSessao(){
+    fetch('/sair-conta', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+
+        // Recebendo a resposta da sessão encerrada
+        if (data.resultado) {
+
+            // Voltando para a página de login
             window.location.href = '/login.html';
         }
     })
