@@ -15,9 +15,12 @@
     <!-- Importando Icones para a página-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
-
+    
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <script src="https://unpkg.com/scrollreveal"></script>
+
+    <!-- Importando arquivos js front-end -->
+    <script src="./js/geral.js"></script>
     <script src="./js/cadastrar-login.js"></script>
 
     <!-- Funções para validação exibição dos dados -->
@@ -94,7 +97,7 @@
 
                   <label for="email">Email</label><br>
                   <span class="input-group-text"><i class="fa fa-envelope" style="color: #f26820;"></i></span>
-                  <input type="email" name="email" id="email" class="form-login-inputs" maxlength="256" onblur="validacaoEmail(formAltUsuario.email.value)" required><br>
+                  <input type="email" name="email" id="email" class="form-login-inputs" maxlength="256" onblur="validacaoEmailAlt(formAltUsuario.email.value)" required><br>
                   <p id="msgemail" class="msg"></p><br>
 
                   <div class="ladoalado_cadastrar" style="width: 250px;">
@@ -114,7 +117,7 @@
 
                       <div class="ladoalado_cadastrar" style="width: 150px; margin-left: 10px;">
                           <label for="cep">CEP</label><br>
-                          <input type="text" name="cep" id="cep" class="form-login-inputs"  placeholder="99999-999" style="width: 145px;" onblur="dados_cep(formAltUsuario.cep.value, 1)" required maxlength="9">
+                          <input type="text" name="cep" id="cep" class="form-login-inputs"  placeholder="99999-999" style="width: 145px;" onblur="dados_cep_alt(formAltUsuario.cep.value, 1)" required maxlength="9">
                       </div>
 
                       <div class="ladoalado_cadastrar" style="width: 300px; margin-left: 10px;">
@@ -161,14 +164,16 @@
                     <div style="margin-left: 10px;">
                       <label for="senha_atual">Insira a Senha Atual</label><br>
                       <span class="input-group-text"><i class="fa fa-lock" style="color: #f26820;"></i></span>
-                      <input type="password" name="senha_atual" id="senha_atual" class="form-login-senha" maxlength="30" required>
-                      <i class="bi bi-eye-fill" id="senha_atual_hide" style="color: #f26820;" title='Mostrar Senha' onclick="mostrar_senha('senha_atual', 'senha_atual_hide')"></i><br><br>
+                      <input type="password" name="senha_atual" id="senha_atual" class="form-login-senha" maxlength="30" onblur="comparar_senhas(formAltUsuario.senha_atual.value)" required>
+                      <i class="bi bi-eye-fill" id="senha_atual_hide" style="color: #f26820;" title='Mostrar Senha' onclick="mostrar_senha('senha_atual', 'senha_atual_hide')"></i><br>
+                      <p id="msgsenhaatual" class="msg"></p><br>
+                      <br>
 
                       <label for="senha_nova">Insira a Nova Senha</label><br>
                       <span class="input-group-text"><i class="fa fa-lock" style="color: #f26820;"></i></span>
-                      <input type="password" name="senha_nova" id="senha_nova" class="form-login-senha" maxlength="30" required onblur="validasenha(formAltUsuario.senha_nova.value)">
+                      <input type="password" name="senha_nova" id="senha_nova" class="form-login-senha" maxlength="30" required onblur="validasenhaalt(formAltUsuario.senha_nova.value)">
                       <i class="bi bi-eye-fill" id="senha_nova_hide" style="color: #f26820;" title='Mostrar Senha' onclick="mostrar_senha('senha_nova', 'senha_nova_hide')"></i><br>
-                      <p id="msgsenha" class="msg"></p><br>
+                      <p id="msgsenhanova" class="msg"></p><br>
                     </div>
 
                   </fieldset><br>
@@ -183,7 +188,6 @@
     <footer>
         <p>© Copyright by <a href="https://github.com/luis-pedro-dutra-carrocini" target="_blank" >Luís Pedro</a></p>
     </footer>
-    <script src="./js/geral.js"></script>
     <script src="js/dados_cliente.js"></script>
   </body>
 </html>

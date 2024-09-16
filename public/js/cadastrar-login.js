@@ -15,7 +15,10 @@ function mostrar_senha(idsenha, idbutton) {
       input_senha.setAttribute('type', 'password');
       mos_senha.classList.replace('bi-eye-slash-fill', 'bi-eye-fill');
   }
-}
+};
+
+// Tornando a função disponível no escopo global
+window.mostrar_senha = mostrar_senha;
 
 // Função com API para retornar os valores do CEP
 async function dados_cep(cep, busca) {
@@ -99,7 +102,10 @@ async function dados_cep(cep, busca) {
       console.error('Erro ao consultar o CEP:', error);
       return { erroCep: 1 };
   }
-}
+};
+
+// Tornando a função disponível no escopo global
+window.dados_cep = dados_cep;
 
 // Função para validar senha
 function validasenha(senha) {
@@ -142,7 +148,10 @@ function validasenha(senha) {
       msgsenha.textContent = "";
       return { erroSenha: 0 };
   }
-}
+};
+
+// Tornando a função disponível no escopo global
+window.validasenha = validasenha;
 
 // Função para validar se as senhas são iguais
 function validaconsenha(senha, consenha) {
@@ -159,7 +168,10 @@ function validaconsenha(senha, consenha) {
       msgconsenha.textContent = "";
       return { erroConSenha: 0 };
   }
-}
+};
+
+// Tornando a função disponível no escopo global
+window.validaconsenha = validaconsenha;
 
 // Função para validação de Email da Página de Cadsatrar-se
 async function validacaoEmail(email) {
@@ -204,7 +216,10 @@ async function validacaoEmail(email) {
       console.log('Erro ao verificar o e-mail:', error);
       return { erroEmail: 1 };
   }
-}
+};
+
+// Tornando a função disponível no escopo global
+window.validacaoEmail = validacaoEmail;
 
 // Função para validar e cadastrar usuário
 async function cadastrar() {
@@ -280,7 +295,10 @@ async function cadastrar() {
   } else {
       document.getElementById('msgerrocad').textContent = "Todos os dados devem ser preenchidos de forma correta!";
   }
-}
+};
+
+// Tornando a função disponível no escopo global
+window.cadastrar = cadastrar;
 
 // Função para validação de Email da Página de Login
 async function validacaoEmailLogin(email) {
@@ -325,9 +343,12 @@ async function validacaoEmailLogin(email) {
         msgEmail.textContent = ('Erro ao verificar o e-mail: ', error);
         return { erroEmail: 1 };
     }
-  }
+  };
 
-  // Função para validar o Login e possívelmente Logar
+// Tornando a função disponível no escopo global
+window.validacaoEmailLogin = validacaoEmailLogin;
+
+// Função para validar o Login e possívelmente Logar
 async function entrar() {
   
     // Obtendo os dados do Login pelo formulário
@@ -406,7 +427,10 @@ async function entrar() {
     }else{
         document.getElementById('msgerrologin').textContent = "Todos os dados devem ser preenchidos de forma correta!";
     }
-  }
+  };
+
+// Tornando a função disponível no escopo global
+window.entrar = entrar;
 
 
   // Função para Verificar se a Sessão foi Iniciada
@@ -427,6 +451,9 @@ async function entrar() {
     })
     .catch(error => console.error('Erro ao verificar a sessão:', error));
   };
+
+// Tornando a função disponível no escopo global
+window.validaSessao = validaSessao;
 
   // Função para Buscar os Dados do Cliente
   function consultaDadosCliente() {
@@ -470,6 +497,9 @@ async function entrar() {
     .catch(error => console.error('Erro ao verificar a sessão:', error));
   };
 
+// Tornando a função disponível no escopo global
+window.consultaDadosCliente = consultaDadosCliente;
+
   // Função para encerrar a sessão
   function encerrarSessao(){
     fetch('/sair-conta', {
@@ -490,3 +520,6 @@ async function entrar() {
     })
     .catch(error => console.error('Erro ao verificar a sessão:', error));
   };
+
+// Tornando a função disponível no escopo global
+window.encerrarSessao = encerrarSessao;
