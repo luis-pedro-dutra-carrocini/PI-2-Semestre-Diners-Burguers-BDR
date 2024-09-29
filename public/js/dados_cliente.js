@@ -18,6 +18,7 @@ function alterar_senha(){
 // Função para exibir a imagem ao ser selecionada
 const arquivo_foto = document.getElementById('foto_usuario');
 const exibir_foto = document.getElementById('img_foto');
+const img_removida = document.getElementById('img_removida');
 
 arquivo_foto.addEventListener('change', function(event) {
     const file = event.target.files[0];
@@ -32,8 +33,19 @@ arquivo_foto.addEventListener('change', function(event) {
 
       // Lê o arquivo como uma URL para exibir
       reader.readAsDataURL(file);
+
+      img_removida.value = "0";
+
     }
 });
+
+// Função para retirar a imagem selecionada
+function retirar_foto(){
+    // Reseta o campo de arquivo
+    document.getElementById('img_removida').value = "1";
+    arquivo_foto.value = '';
+    exibir_foto.src = "./imagens/usuarios/usuario-n.png";
+}
 
 // Função para verificar se a senha inserida é a senha cadastrada
 async function comparar_senhas(senha_atual){
@@ -194,7 +206,7 @@ async function validacaoEmailAlt(email) {
   // Campo para mensagem de erro no email
   const msgEmail = document.getElementById('msgemail');
 
-  let emailOriginal = "aaa";
+  let emailOriginal = "";
 
   // Buscando o email original para comparar com o novo, para ver se não são iguais
   await fetch('/buscar-dados-cliente', {
@@ -205,8 +217,6 @@ async function validacaoEmailAlt(email) {
     })
     .then(response => response.json())
     .then(data => {
-
-    emailOriginal = "teste";
 
     // Verificando se o Usuário realmente existe
     if (data.existe) {
@@ -285,27 +295,23 @@ async function alterarDadosUsuario() {
     const foto = fotoInput.files[0];
   
     // Verificando se a imagem foi escolhida
-    if (!foto) {
+    if (foto) {
   
-      // Enviando mensagem de erro
-      document.getElementById('msgfoto').textContent = "Nenhuma Imagem Escolhida!";
-      return;
+         // Tipo do arquivo da foto
+        const tipoFoto = foto.type;
+    
+        // Verificando se o tipo de imagem é válido
+        // .jpg, .jpeg, .png, .gif
+        if (tipoFoto != "image/jpeg" && tipoFoto != "image/jpg" && tipoFoto != "image/png" && tipoFoto != "image/gif"){
+    
+        // Enviando mensagem de erro
+        document.getElementById('msgfoto').textContent = "Tipo de arquivo Inválido!";
+        return;
+        }
+    
+        // Apagando qualquer tipo de mensagem de erro de foto
+        document.getElementById('msgfoto').textContent = "";
     }
-  
-    // Tipo do arquivo da foto
-    const tipoFoto = foto.type;
-  
-    // Verificando se o tipo de imagem é válido
-    // .jpg, .jpeg, .png, .gif
-    if (tipoFoto != "image/jpeg" && tipoFoto != "image/jpg" && tipoFoto != "image/png" && tipoFoto != "image/gif"){
-  
-      // Enviando mensagem de erro
-      document.getElementById('msgfoto').textContent = "Tipo de arquivo Inválido!";
-      return;
-    }
-  
-    // Apagando qualquer tipo de mensagem de erro de foto
-    document.getElementById('msgfoto').textContent = "";
   
     // Telefone e Celular
     const telefone = document.getElementById('telefone').value.trim();
@@ -322,13 +328,24 @@ async function alterarDadosUsuario() {
     const numero = document.getElementById('numero').value.trim();
   
     // Variaveis para executar e receber o resultados das validações das funções
-    const emailValidacao = await validacaoEmail(email);
-    const senhaValidacao = validasenhaalt(senhaNova);
-    const campSenhas = comparar_senhas(senhaAtual);
+    const emailValidacao = await validacaoEmailAlt(email);
+    const campSenhas = await comparar_senhas(senhaAtual);
     const cepValidacao = await dados_cep_alt(cep, 2);
+
+    // Verificando se foi desejavel a alteração de senha
+    const altSenha = document.getElementById('alterar_senha').checked;
+
+    let erroValidacaoSenha = 0;
+
+    if (altSenha == true){
+        const senhaValidacao = await validasenhaalt(senhaNova);
+        erroValidacaoSenha = senhaValidacao.erroSenha;
+    }else{
+        erroValidacaoSenha = 0;
+    }
   
     // Verificando os resultados
-    if (emailValidacao.erroEmail === 0 && senhaValidacao.erroSenha === 0 && campSenhas.erroConSenha === 0 && cepValidacao.erroCep === 0) {
+    if (emailValidacao.erroEmail === 0 &&  erroValidacaoSenha === 0 && campSenhas.erroSenhaAt === 0 && cepValidacao.erroCep === 0) {
   
         // Verificando se não há campos nulos
         if (nome && bairro && rua && numero && telefone.length == 15 && celular.length == 15) {
@@ -342,3 +359,41 @@ async function alterarDadosUsuario() {
         document.getElementById('msgerrocad').textContent = "Todos os dados devem ser preenchidos de forma correta!";
     }
   };
+
+  // Função para Excluir a Conta do Usuário
+  async function excluirConta(){
+
+    // Recebendo a senha
+    const senhaAtual = document.getElementById('senha_atual').value.trim();
+
+    // Comparando as senhas
+    const campSenhas = await comparar_senhas(senhaAtual);
+
+    // Verificando se as senha foram iguais
+    if (campSenhas.erroSenhaAt === 0){
+
+        // Confirmação
+        const confirmacao = confirm('Deseja realmente Excluir a Conta?');
+
+        // Validando confirmação
+        if (confirmacao){
+        
+            // Excluindo a conta
+            await fetch('/excluir-conta', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+                })
+                .then(response => response.json())
+                .then(data => {
+
+                // Verificando se o Usuário realmente existe
+                if (data.excluiu) {
+                    return window.location.href = '/login.html';
+                }
+                })
+                .catch(error => console.error('Erro ao excluir a conta:', error));
+        }
+    }
+  }

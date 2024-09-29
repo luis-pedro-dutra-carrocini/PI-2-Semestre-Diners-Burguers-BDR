@@ -8,7 +8,7 @@ create table Usuarios(
  Nome_Usuario varchar(75) not null,
  Senha_Usuario varchar(300) not null,
  Email_Usuario varchar(256) not null,
- Foto_Usuario varchar(300) not null,
+ Foto_Usuario varchar(300) null,
  Nivel_Usuario varchar(15) not null,
  Status_Usuario varchar(30) not null,
  End_CEP varchar(10) not null,

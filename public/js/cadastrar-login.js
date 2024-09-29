@@ -239,27 +239,22 @@ async function cadastrar() {
   const foto = fotoInput.files[0];
 
   // Verificando se a imagem foi escolhida
-  if (!foto) {
+  if (foto) {
+    // Tipo do arquivo da foto
+    const tipoFoto = foto.type;
 
-    // Enviando mensagem de erro
-    document.getElementById('msgfoto').textContent = "Nenhuma Imagem Escolhida!";
-    return;
+    // Verificando se o tipo de imagem é válido
+    // .jpg, .jpeg, .png, .gif
+    if (tipoFoto != "image/jpeg" && tipoFoto != "image/jpg" && tipoFoto != "image/png" && tipoFoto != "image/gif"){
+
+        // Enviando mensagem de erro
+        document.getElementById('msgfoto').textContent = "Tipo de arquivo Inválido!";
+        return;
+    }
+
+    // Apagando qualquer tipo de mensagem de erro de foto
+    document.getElementById('msgfoto').textContent = "";
   }
-
-  // Tipo do arquivo da foto
-  const tipoFoto = foto.type;
-
-  // Verificando se o tipo de imagem é válido
-  // .jpg, .jpeg, .png, .gif
-  if (tipoFoto != "image/jpeg" && tipoFoto != "image/jpg" && tipoFoto != "image/png" && tipoFoto != "image/gif"){
-
-    // Enviando mensagem de erro
-    document.getElementById('msgfoto').textContent = "Tipo de arquivo Inválido!";
-    return;
-  }
-
-  // Apagando qualquer tipo de mensagem de erro de foto
-  document.getElementById('msgfoto').textContent = "";
 
   // Telefone e Celular
   const telefone = document.getElementById('telefone').value.trim();
@@ -478,7 +473,11 @@ window.validaSessao = validaSessao;
             document.getElementById('celular').value = data.celular;
 
             // Foto
-            document.getElementById('img_foto').src = "imagens/usuarios/" + data.foto;
+            if (!data.foto){
+                document.getElementById('img_foto').src = "imagens/usuarios/usuario-n.png";
+            }else{
+                document.getElementById('img_foto').src = "imagens/usuarios/" + data.foto;
+            }
 
             // Endereço
             document.getElementById('cep').value = data.cep;

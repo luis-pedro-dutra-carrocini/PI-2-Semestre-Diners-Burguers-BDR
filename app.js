@@ -13,6 +13,7 @@ const session = require('express-session');
 
 // Requerindo multer e path (upload de arquivos no servidor)
 const multer = require('multer');
+const fs = require('fs');
 const path = require('path');
 const { error } = require('console');
 
@@ -95,9 +96,6 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
     const foto = req.file ? req.file.filename : null;
 
     try {
-        if (!foto) {
-            throw new Error('Foto de Perfil não Salva!');
-        }
 
         const saltRounds = 10;
         const senhaHash = await bcrypt.hash(senha_cadastro, saltRounds);
@@ -243,6 +241,9 @@ app.post('/verificar-sessao', (req, res) => {
 // Criando uma variavel para guardar a senha criptografada e cadastrada, para ser comparada em outras ocasiões
 var senha_cadastrada = "";
 
+// Criando uma variável para guardarr a ultima foto
+var fotoUsuOriginal = "";
+
 // Função para buscar os dados do cliente (Página Alterar Dados Usuário)
 app.post('/buscar-dados-cliente', (req, res) => {
 
@@ -283,6 +284,9 @@ app.post('/buscar-dados-cliente', (req, res) => {
 
                 // Obtendo a senha do Usuário Cadastrado
                 senha_cadastrada = results[0].Senha_Usuario;
+
+                // Obtendo a foto original
+                fotoUsuOriginal = results[0].Foto_Usuario;
 
                 // Retornando os dados do cliente para a exibição
                 return res.status(200).json({
@@ -348,57 +352,163 @@ app.post('/comparar-senhas', async (req, res) => {
 
 
 // Função para alterar os dados do Usuário com upload de imagem (Página Alterar Dados Usuário)
-app.post('/alterar-usuario', upload.single('formAltUsuario'), async (req, res) => {
-    
-    const { nome, email, telefone, celular, cep, cidade, uf, bairro, rua, numero, complemento, senha_cadastro } = req.body;
+app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, res) => {
+    // Obtendo os dados do Formulário
+    const { nome, email, telefone, celular, cep, cidade, uf, bairro, rua, numero, complemento, senha_nova, alterar_senha, senha_atual, img_removida } = req.body;
 
-    const nivel = 'cliente';
-    const status = 'ativo';
-    
-    const foto = req.file ? req.file.filename : null;
+    let senha_usuario = senha_nova;
+
+    // Mantém a senha atual caso o usuário não queira alterar
+    if (alterar_senha !== "sim") {
+        senha_usuario = senha_atual;
+    }
+
+    // Obtendo o ID do Cliente da sessão
+    const ID_Cliente = req.session.clienteID;
 
     try {
-        if (!foto) {
-            throw new Error('Foto de Perfil não Salva!');
-        }
-
-        const saltRounds = 10;
-        const senhaHash = await bcrypt.hash(senha_cadastro, saltRounds);
-
-        const cadastrarUsu = 'INSERT INTO Usuarios (Nome_Usuario, Email_Usuario, Senha_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, End_CEP, End_Cidade, End_UF, End_Bairro, End_Rua, End_Numero, End_Complemento) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);';
-
-        const inserirUsuario = await new Promise((resolve, reject) => {
-            conexao.query(cadastrarUsu, [nome, email, senhaHash, foto, nivel, status, cep, cidade, uf, bairro, rua, numero, complemento], (err, results) => {
+        // Obtendo a senha original e a foto do usuário
+        const userQuery = 'SELECT Senha_Usuario, Foto_Usuario FROM Usuarios WHERE ID_Usuario = ?';
+        const [user] = await new Promise((resolve, reject) => {
+            conexao.query(userQuery, [ID_Cliente], (err, results) => {
                 if (err) {
-                    throw new Error('Erro no Cadastro do Usuário!');
-                }
-                resolve(results.insertId);
-            });
-        });
-
-        const ID_Usuario = inserirUsuario;
-
-        const cadastrarTelefones = 'INSERT INTO Telefones (ID_Usuario, Telefone) VALUES (?,?), (?,?);';
-
-        await new Promise((resolve, reject) => {
-            conexao.query(cadastrarTelefones, [ID_Usuario, telefone, ID_Usuario, celular], (err, results) => {
-                if (err) {
-                    throw new Error('Erro no Cadastro dos Telefones do Usuário!');
+                    return reject(new Error('Erro ao obter os dados do usuário!'));
                 }
                 resolve(results);
             });
         });
 
-        // Iniciando a sessão
-        req.session.clienteID = ID_Usuario;
+        // Se nenhuma nova foto foi enviada, mantemos a foto original
+        let foto = req.file ? req.file.filename : user.Foto_Usuario;
 
-        // Redirecionando para a página "home_usuario.html"
-        return res.redirect('/home_cliente.html');
+        // Verificando se o usuário removeu a imagem (caso 'img_removida' seja '1')
+        if (img_removida === '1') {
+            foto = "usuario-n.png";
+        }
+
+        // Caso tenha sido enviada uma nova imagem e a imagem antiga não seja a padrão
+        if (user.Foto_Usuario !== foto && user.Foto_Usuario !== "usuario-n.png") {
+            const oldImagePath = path.join(__dirname, 'public/imagens/usuarios', user.Foto_Usuario);
+            console.log('Entrou  1');
+
+            // Verifica se o arquivo existe antes de tentar excluí-lo
+            if (fs.existsSync(oldImagePath)) {
+                fs.unlink(oldImagePath, (err) => {
+                    if (err) {
+                        console.error(`Erro ao excluir a imagem antiga: ${oldImagePath}`, err);
+                    } else {
+                        console.log(`Imagem antiga excluída com sucesso: ${oldImagePath}`);
+                    }
+                });
+            }
+        }
+
+        // Criptografando a senha, se for alterada
+        const saltRounds = 10;
+        const senhaHash = await bcrypt.hash(senha_usuario, saltRounds);
+
+        // Query para alterar os dados do usuário
+        const alterarUsu = 'UPDATE Usuarios SET Nome_Usuario = ?, Senha_Usuario = ?, Email_Usuario = ?, Foto_Usuario = ?, End_CEP = ?, End_Cidade = ?, End_UF = ?, End_Bairro = ?, End_Rua = ?, End_Numero = ?, End_Complemento = ? WHERE ID_Usuario = ?;';
+
+        // Alterando os dados do usuário
+        await new Promise((resolve, reject) => {
+            conexao.query(alterarUsu, [nome, senhaHash, email, foto, cep, cidade, uf, bairro, rua, numero, complemento, ID_Cliente], (err, results) => {
+                if (err) {
+                    return reject(new Error('Erro ao alterar os dados do usuário!'));
+                }
+                resolve(results);
+            });
+        });
+
+        // Obtendo os ID's dos telefones do usuário
+        const telefoneQuery = 'SELECT ID_Telefone FROM Telefones WHERE ID_Usuario = ?;';
+        const telefones = await new Promise((resolve, reject) => {
+            conexao.query(telefoneQuery, [ID_Cliente], (err, results) => {
+                if (err) return reject(new Error('Erro ao obter os telefones do usuário!'));
+                resolve(results);
+            });
+        });
+
+        // Função para atualizar telefones
+        async function atualizarTelefone(numero, ID_Telefone) {
+            if (ID_Telefone) {
+                const alterarTelefone = 'UPDATE Telefones SET Telefone = ? WHERE ID_Telefone = ?;';
+                return new Promise((resolve, reject) => {
+                    conexao.query(alterarTelefone, [numero, ID_Telefone], (err, results) => {
+                        if (err) return reject(new Error(`Erro ao alterar o telefone: ${numero}`));
+                        resolve(results);
+                    });
+                });
+            }
+        }
+
+        // Atualizando telefone e celular
+        await atualizarTelefone(telefone, telefones[0]?.ID_Telefone);
+        await atualizarTelefone(celular, telefones[1]?.ID_Telefone);
+
+        // Redireciona para a página de dados do cliente após o sucesso
+        return res.redirect('/dados_cliente.html');
 
     } catch (error) {
-        throw new Error(error.message);
+        console.error('Erro:', error);
+        return res.status(500).send('Erro ao alterar os dados do usuário.');
     }
 });
+
+
+// Função para excluir a conta do Usuário (Aterar dados Cliente)
+app.post('/excluir-conta', async (req, res) => {
+
+    // Obtendo o ID do Cliente da sessão
+    const ID_Cliente = req.session.clienteID;
+
+    // Obtendo a foto do usuário
+    const userQuery = 'SELECT Foto_Usuario FROM Usuarios WHERE ID_Usuario = ?';
+    const [user] = await new Promise((resolve, reject) => {
+        conexao.query(userQuery, [ID_Cliente], (err, results) => {
+            if (err) {
+                return reject(new Error('Erro ao obter os dados do usuário!'));
+            }
+            resolve(results);
+        });
+    });
+
+    // Deletando a imagem do usuário
+    const oldImagePath = path.join(__dirname, 'public/imagens/usuarios', user.Foto_Usuario);
+
+    // Verifica se o arquivo existe antes de tentar excluí-lo
+    if (fs.existsSync(oldImagePath)) {
+        fs.unlink(oldImagePath, (err) => {
+            if (err) {
+                console.error(`Erro ao excluir a imagem antiga: ${oldImagePath}`, err);
+            } else {
+                console.log(`Imagem antiga excluída com sucesso: ${oldImagePath}`);
+            }
+        });
+    }
+
+    // Deletando os telefones do usuário
+    const excluirTelefoneQuery = 'DELETE FROM Telefones where ID_Usuario = ?;';
+        const excluirTelefone = await new Promise((resolve, reject) => {
+            conexao.query(excluirTelefoneQuery, [ID_Cliente], (err, results) => {
+                if (err) return reject(new Error('Erro ao excluir o Telefone!'));
+                resolve(results);
+            });
+        });
+
+    // Deletando o usuário
+    const excluirQuery = 'DELETE FROM Usuarios where ID_Usuario = ?;';
+        const excluir = await new Promise((resolve, reject) => {
+            conexao.query(excluirQuery, [ID_Cliente], (err, results) => {
+                if (err) return reject(new Error('Erro ao excluir a conta!'));
+                resolve(results);
+            });
+        });
+
+    res.status(200).json({ excluiu: true }); 
+
+});
+
 
 
 // Iniciar o servidor

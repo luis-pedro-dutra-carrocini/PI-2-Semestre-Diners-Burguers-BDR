@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Home</title>
+    <title>Dados Cliente</title>
 
     <!-- Importando CSS-->
     <link rel="stylesheet" href="./css/style.css" />
@@ -12,7 +12,7 @@
     <!-- Icone na página -->
     <link rel="icon" href="./imagens/logos/logo_diner.png" type="img/jpg">
 
-    <!-- Importando Icones para a página-->
+    <!-- Importandox Icones para a página-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/all.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.4/font/bootstrap-icons.css">
     
@@ -84,9 +84,11 @@
                 <div style="width: 100%; position:relative;
                 text-align:center;">
                   <img id="img_foto" src="" alt="Foto Usuário" style="width: 250px; height: 250px; border-radius: 20px;border: 2px solid #f26820;">
-                  <label class="input-group-text" for="foto_usuario" style="position:absolute; z-index:1; top:90%; left:50%; width:60px; height:30px; padding:0; margin:-15px 0 0 -30px;"><i class="bi bi-camera-fill" style="color: #f26820;"></i></label>
+                  <label class="input-group-text" for="foto_usuario" style="position:absolute; z-index:1; top:90%; left:50%; width:60px; height:30px; padding:0; margin:-15px 0 0 -30px;"><i class="bi bi-camera-fill" style="color: #f26820;" title="Escolher Foto"></i></label>
                     <input type="file" id="foto_usuario" name="foto_usuario" class="form-login-inputs" accept="image/*" style="display: none;">
+                    <input type="text" style="display: none;" id="img_removida" name="img_removida" value="0">
                 </div>
+                <center><label style="color: #f26820;" title="Deletar Foto" id="retirar_foto" onclick="retirar_foto()"><b>X</b></label></center>
                 <p id="msgfoto" class="msg"></p>
 
 
@@ -152,6 +154,12 @@
                       <p id="msgcep" class="msg"></p><br>
                   </fieldset><br>
 
+                  <label for="senha_atual">Insira a Senha Atual</label><br>
+                  <span class="input-group-text"><i class="fa fa-lock" style="color: #f26820;"></i></span>
+                  <input type="password" name="senha_atual" id="senha_atual" class="form-login-senha" maxlength="30" onblur="comparar_senhas(formAltUsuario.senha_atual.value)" required>
+                  <i class="bi bi-eye-fill" id="senha_atual_hide" style="color: #f26820;" title='Mostrar Senha' onclick="mostrar_senha('senha_atual', 'senha_atual_hide')"></i><br>
+                  <p id="msgsenhaatual" class="msg"></p><br>
+
                   <label onclick="alterar_senha()">
                     <input type="checkbox" checked id="alterar_senha" name="alterar_senha" value="sim" style=" accent-color: #f26820; width: 15px; height: 15px;">
                     <label for="alterar_senha">Alterar Senha</label>
@@ -162,12 +170,6 @@
                     <legend style="font-size: 23px; text-align: center; width: 150px;">Alterar Senha</legend><br>
 
                     <div style="margin-left: 10px;">
-                      <label for="senha_atual">Insira a Senha Atual</label><br>
-                      <span class="input-group-text"><i class="fa fa-lock" style="color: #f26820;"></i></span>
-                      <input type="password" name="senha_atual" id="senha_atual" class="form-login-senha" maxlength="30" onblur="comparar_senhas(formAltUsuario.senha_atual.value)" required>
-                      <i class="bi bi-eye-fill" id="senha_atual_hide" style="color: #f26820;" title='Mostrar Senha' onclick="mostrar_senha('senha_atual', 'senha_atual_hide')"></i><br>
-                      <p id="msgsenhaatual" class="msg"></p><br>
-                      <br>
 
                       <label for="senha_nova">Insira a Nova Senha</label><br>
                       <span class="input-group-text"><i class="fa fa-lock" style="color: #f26820;"></i></span>
@@ -178,7 +180,8 @@
 
                   </fieldset><br>
 
-                  <button type="button" onclick="alterarDadosUsuario()" class="button">Alterar Dados</button>
+                  <button type="button" onclick="alterarDadosUsuario()" class="button">Alterar Dados</button><br><br>
+                  <button type="button" onclick="excluirConta()" class="button">Excluir Conta</button>
               </form>
           </div>
           <p class="msg" id="msgerrocad"></p><br>
