@@ -88,7 +88,7 @@ app.post('/verificar-email', (req, res) => {
 // Função para cadastrar o Usuário com upload de imagem (Página Cadastrar Usuário)
 app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) => {
     
-    const { nome, email, telefone, celular, cep, cidade, uf, bairro, rua, numero, complemento, senha_cadastro } = req.body;
+    const { nome, email, telefone, senha_cadastro } = req.body;
 
     const nivel = 'cliente';
     const status = 'ativo';
@@ -100,10 +100,10 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
         const saltRounds = 10;
         const senhaHash = await bcrypt.hash(senha_cadastro, saltRounds);
 
-        const cadastrarUsu = 'INSERT INTO Usuarios (Nome_Usuario, Email_Usuario, Senha_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, End_CEP, End_Cidade, End_UF, End_Bairro, End_Rua, End_Numero, End_Complemento) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);';
+        const cadastrarUsu = 'INSERT INTO Usuarios (Nome_Usuario, Email_Usuario, Senha_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, Telefone_Usuario) VALUES (?,?,?,?,?,?,?);';
 
         const inserirUsuario = await new Promise((resolve, reject) => {
-            conexao.query(cadastrarUsu, [nome, email, senhaHash, foto, nivel, status, cep, cidade, uf, bairro, rua, numero, complemento], (err, results) => {
+            conexao.query(cadastrarUsu, [nome, email, senhaHash, foto, nivel, status, telefone], (err, results) => {
                 if (err) {
                     throw new Error('Erro no Cadastro do Usuário!');
                 }
@@ -112,17 +112,6 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
         });
 
         const ID_Usuario = inserirUsuario;
-
-        const cadastrarTelefones = 'INSERT INTO Telefones (ID_Usuario, Telefone) VALUES (?,?), (?,?);';
-
-        await new Promise((resolve, reject) => {
-            conexao.query(cadastrarTelefones, [ID_Usuario, telefone, ID_Usuario, celular], (err, results) => {
-                if (err) {
-                    throw new Error('Erro no Cadastro dos Telefones do Usuário!');
-                }
-                resolve(results);
-            });
-        });
 
         // Iniciando a sessão
         req.session.clienteID = ID_Usuario;
@@ -265,23 +254,6 @@ app.post('/buscar-dados-cliente', (req, res) => {
         // Verificando se o ID do Usuário realmente existe
         if (results.length > 0) {
 
-            // Consultando para obter os Telefones do Usuário
-            conexao.query('SELECT Telefone FROM Telefones WHERE ID_Usuario = ?', [ID_Cliente], (err, resultado) => {
-                // Verificando se houve um erro na consulta
-                if (err) {
-                    return res.status(500).json({ error: 'Erro ao consultar o Banco de Dados - Buscando Telefones do Usuário!' });
-                }
-
-                // Inicializando variáveis para armazenar telefones
-                let telefone = "";
-                let celular = "";
-
-                // Verificando se há telefones cadastrados
-                if (resultado.length > 0) {
-                    telefone = resultado[0]?.Telefone || "";
-                    celular = resultado[1]?.Telefone || "";
-                }
-
                 // Obtendo a senha do Usuário Cadastrado
                 senha_cadastrada = results[0].Senha_Usuario;
 
@@ -294,19 +266,8 @@ app.post('/buscar-dados-cliente', (req, res) => {
                     nome: results[0].Nome_Usuario,
                     email: results[0].Email_Usuario,
                     foto: results[0].Foto_Usuario,
-                    cep: results[0].End_CEP,
-                    cidade: results[0].End_Cidade,
-                    uf: results[0].End_UF,
-                    bairro: results[0].End_Bairro,
-                    rua: results[0].End_Rua,
-                    numero: results[0].End_Numero,
-                    complemento: results[0].End_Complemento,
-                    telefone: telefone,
-                    celular: celular
+                    telefone: results[0].Telefone_Usuario
                 });
-            });
-        } else {
-            return res.status(200).json({ existe: false });
         }
     });
 });
@@ -354,7 +315,7 @@ app.post('/comparar-senhas', async (req, res) => {
 // Função para alterar os dados do Usuário com upload de imagem (Página Alterar Dados Usuário)
 app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, res) => {
     // Obtendo os dados do Formulário
-    const { nome, email, telefone, celular, cep, cidade, uf, bairro, rua, numero, complemento, senha_nova, alterar_senha, senha_atual, img_removida } = req.body;
+    const { nome, email, telefone, senha_nova, alterar_senha, senha_atual, img_removida } = req.body;
 
     let senha_usuario = senha_nova;
 
@@ -389,7 +350,6 @@ app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, re
         // Caso tenha sido enviada uma nova imagem e a imagem antiga não seja a padrão
         if (user.Foto_Usuario !== foto && user.Foto_Usuario !== "usuario-n.png") {
             const oldImagePath = path.join(__dirname, 'public/imagens/usuarios', user.Foto_Usuario);
-            console.log('Entrou  1');
 
             // Verifica se o arquivo existe antes de tentar excluí-lo
             if (fs.existsSync(oldImagePath)) {
@@ -408,43 +368,17 @@ app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, re
         const senhaHash = await bcrypt.hash(senha_usuario, saltRounds);
 
         // Query para alterar os dados do usuário
-        const alterarUsu = 'UPDATE Usuarios SET Nome_Usuario = ?, Senha_Usuario = ?, Email_Usuario = ?, Foto_Usuario = ?, End_CEP = ?, End_Cidade = ?, End_UF = ?, End_Bairro = ?, End_Rua = ?, End_Numero = ?, End_Complemento = ? WHERE ID_Usuario = ?;';
+        const alterarUsu = 'UPDATE Usuarios SET Nome_Usuario = ?, Senha_Usuario = ?, Email_Usuario = ?, Foto_Usuario = ?, Telefone_Usuario = ? WHERE ID_Usuario = ?;';
 
         // Alterando os dados do usuário
         await new Promise((resolve, reject) => {
-            conexao.query(alterarUsu, [nome, senhaHash, email, foto, cep, cidade, uf, bairro, rua, numero, complemento, ID_Cliente], (err, results) => {
+            conexao.query(alterarUsu, [nome, senhaHash, email, foto, telefone, ID_Cliente], (err, results) => {
                 if (err) {
                     return reject(new Error('Erro ao alterar os dados do usuário!'));
                 }
                 resolve(results);
             });
         });
-
-        // Obtendo os ID's dos telefones do usuário
-        const telefoneQuery = 'SELECT ID_Telefone FROM Telefones WHERE ID_Usuario = ?;';
-        const telefones = await new Promise((resolve, reject) => {
-            conexao.query(telefoneQuery, [ID_Cliente], (err, results) => {
-                if (err) return reject(new Error('Erro ao obter os telefones do usuário!'));
-                resolve(results);
-            });
-        });
-
-        // Função para atualizar telefones
-        async function atualizarTelefone(numero, ID_Telefone) {
-            if (ID_Telefone) {
-                const alterarTelefone = 'UPDATE Telefones SET Telefone = ? WHERE ID_Telefone = ?;';
-                return new Promise((resolve, reject) => {
-                    conexao.query(alterarTelefone, [numero, ID_Telefone], (err, results) => {
-                        if (err) return reject(new Error(`Erro ao alterar o telefone: ${numero}`));
-                        resolve(results);
-                    });
-                });
-            }
-        }
-
-        // Atualizando telefone e celular
-        await atualizarTelefone(telefone, telefones[0]?.ID_Telefone);
-        await atualizarTelefone(celular, telefones[1]?.ID_Telefone);
 
         // Redireciona para a página de dados do cliente após o sucesso
         return res.redirect('/dados_cliente.html');
@@ -487,15 +421,6 @@ app.post('/excluir-conta', async (req, res) => {
         });
     }
 
-    // Deletando os telefones do usuário
-    const excluirTelefoneQuery = 'DELETE FROM Telefones where ID_Usuario = ?;';
-        const excluirTelefone = await new Promise((resolve, reject) => {
-            conexao.query(excluirTelefoneQuery, [ID_Cliente], (err, results) => {
-                if (err) return reject(new Error('Erro ao excluir o Telefone!'));
-                resolve(results);
-            });
-        });
-
     // Deletando o usuário
     const excluirQuery = 'DELETE FROM Usuarios where ID_Usuario = ?;';
         const excluir = await new Promise((resolve, reject) => {
@@ -509,7 +434,80 @@ app.post('/excluir-conta', async (req, res) => {
 
 });
 
+// Função para cadastrar o pedido do cliente
+app.post('/cadastrar-pedido', async (req, res) => {
 
+    // Obtendo o ID do Cliente da sessão
+    const ID_Cliente = req.session.clienteID;
+
+    // Verificando se a sessão está iniciada
+    if (ID_Cliente == undefined) {
+        console.log('Sessão não iniciada. Redirecionando para login.html');
+        return res.status(200).json({ login: true });
+    }
+
+    // Obtendo os dados do pedido enviados
+    const {entregaNecessaria, tipoPagamento, idProdutosPedidos, quantProdutos} = req.body;
+
+    let subTotaPedido = 0;
+    let desconto = 0;
+
+    // Criando um loop para obter todos os produtos cadastrados com os seus preços e calcular a conta
+    for (let i = 0; i < idProdutosPedidos.length; i++){
+
+        const buscaProduto = 'SELECT Preco_Produto FROM Produtos WHERE ID_Produto = ?;';
+
+        await new Promise((resolve, reject) => {
+            conexao.query(buscaProduto, [idProdutosPedidos[i]], (err, results) => {
+                    if (err) {
+                        throw new Error('Erro ao Buscar Produto!');
+                    }
+                    
+                    if (results.length > 0){
+                        subTotaPedido += Number(results[0].Preco_Produto) * Number(quantProdutos[i]);
+                    }
+
+                    resolve(results);
+            });
+        });
+    }
+
+    // Atriibuindo valores padrões para o cadastro de pedidos
+    const horaInicio = new Date();
+
+    let totalPedido = subTotaPedido - desconto;
+
+    const cadastarPedido = 'INSERT INTO Pedidos (ID_Usuario, SubTotal_Pedido, Total_Pedido, Desconto_Pedido, Status_Pedido, Entrega_Necessaria, Tipo_Pagamento, Hora_Inicio) VALUES (?,?,?,?,?,?,?,?);';
+
+    // Cadsatrando o pedido e obtendo o seu ID
+    const idPedido = await new Promise((resolve, reject) => {
+        conexao.query(cadastarPedido, [ID_Cliente, subTotaPedido, totalPedido, desconto, 'Enviado', entregaNecessaria, tipoPagamento, horaInicio], (err, results) => {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            resolve(results.insertId);
+        });
+    });
+
+    // Criando um loop para cadsatrar todos os intens do pedido
+    for (let i = 0; i < idProdutosPedidos.length; i++){
+
+        const cadasIntensPedido = 'INSERT INTO Pedidos_Produtos (ID_Pedido, ID_Produto, Qt_Produto) VALUES (?,?,?);';
+
+        await new Promise((resolve, reject) => {
+            conexao.query(cadasIntensPedido, [idPedido, idProdutosPedidos[i], quantProdutos[i]], (err, results) => {
+                    if (err) {
+                        throw new Error('Erro ao Cadastrar os itens do pedido!');
+                    }
+                    resolve(results);
+            });
+        });
+    }
+
+    return res.status(200).json({ enviado: true });
+
+});
 
 // Iniciar o servidor
 app.listen(3000, () => {

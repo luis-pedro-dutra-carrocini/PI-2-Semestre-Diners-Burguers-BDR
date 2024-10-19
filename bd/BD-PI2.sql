@@ -1,8 +1,7 @@
-drop database diners_burguers;
 create database Diners_Burguers;
 use Diners_Burguers;
 
-# Criando a tabel Usuários
+# Criando a tabela Usuários
 create table Usuarios(
  ID_Usuario int auto_increment primary key,
  Nome_Usuario varchar(75) not null,
@@ -11,21 +10,7 @@ create table Usuarios(
  Foto_Usuario varchar(300) null,
  Nivel_Usuario varchar(15) not null,
  Status_Usuario varchar(30) not null,
- End_CEP varchar(10) not null,
- End_Cidade varchar(70) not null,
- End_UF varchar(2) not null,
- End_Bairro varchar(110) not null,
- End_Rua varchar(70) not null,
- End_Numero int not null,
- End_Complemento varchar(60) null
-);
-
-# Criando a tabela 	Telefones dos Usuários
-create table Telefones(
- ID_Telefone int auto_increment primary key,
- ID_Usuario int not null,
- Telefone varchar(16) not null,
- foreign key(ID_Usuario) references Usuarios(ID_Usuario)
+ Telefone_Usuario varchar(16) not null
 );
 
 # Criando a tabela Avaliações para o Site dos Usuários
@@ -48,7 +33,7 @@ create table Pedidos(
  Status_Pedido varchar(15) not null,
  Entrega_Necessaria boolean not null,
  Tipo_Pagamento varchar(20) not null,
- Tempo_Estipulado varchar(15) not null,
+ Tempo_Estipulado varchar(15),
  Hora_Inicio datetime not null,
  Hora_Fim datetime,
  Tempo_Gasto varchar(15),
@@ -61,32 +46,21 @@ create table Produtos(
  ID_Usuario int not null,
  Nome_Produto varchar(70) not null,
  Descricao_Produto text not null,
+ Composicao_Produto text not null,
  Classe_Produto varchar(40) not null,
  Foto_Produto varchar(300) not null,
+ Preco_Produto double not null,
  Qt_Adiquirida int not null,
  Qt_Vendida int not null,
  Qt_Estoque int generated always as (Qt_Adiquirida - Qt_Vendida) stored,
  foreign key(ID_Usuario) references Usuarios(ID_Usuario)
 );
 
-# Criando tabela de Tamanhos de Produtos
-create table Tamanhos(
- ID_Tamanho int auto_increment primary key,
- ID_Produto int not null,
- Descricao_Tamanho varchar(30) not null,
- Preco_Tamanho double not null,
- foreign key(ID_Produto) references Produtos(ID_Produto)
-);
-
 # Criando tabela para a Relação N para N de Pedidos e Produtos
 create table Pedidos_Produtos(
  ID_Pedido int not null,
  ID_Produto int not null,
- ID_Tamanho int not null,
  Qt_Produto int not null,
- Valor_Produto double not null,
- Status_Produto varchar(15) not null,
- foreign key(ID_Tamanho) references Tamanhos(ID_Tamanho),
  foreign key(ID_Pedido) references Pedidos(ID_Pedido),
  foreign key(ID_Produto) references Produtos(ID_Produto),
  constraint PK_PedProd primary key (ID_Pedido,ID_Produto)
@@ -115,26 +89,6 @@ create table Produtos_Descontos(
  constraint PK_ProdDesc primary key (ID_Desconto,ID_Produto)
 );
 
-# Criando a tabela de Ingredientes dos Produtos
-create table Ingredientes(
- ID_Ingrediente int auto_increment primary key,
- ID_Usuario int not null,
- Nome_Ingrediente varchar(70) not null,
- Unidade_Medida varchar(3) not null,
- Qt_Comprada int not null,
- Qt_Usada int not null,
- Qt_Estoque int generated always as (Qt_Comprada - Qt_Usada) stored
-);
-
-# Criando a tabela para a relação N para N das tabelas Produtos e Ingredientes
-create table Produtos_Ingredientes(
- ID_Ingrediente int not null,
- ID_Produto int not null,
- foreign key(ID_Ingrediente) references Ingredientes(ID_Ingrediente),
- foreign key(ID_Produto) references Produtos(ID_Produto),
- constraint PK_ProdIngre primary key (ID_Ingrediente,ID_Produto)
-);
-
 # Criando a tabela Carrinhos do Usuário
 create table Carrinhos(
  ID_Carrinho int auto_increment primary key,
@@ -161,3 +115,43 @@ create table Favoritos(
  foreign key(ID_Produto) references Produtos(ID_Produto),
  constraint PK_ProdCar primary key (ID_Usuario,ID_Produto)
 );
+
+# Inserindo usuario padrão (Funcionário) para o cadastro dos produtos
+insert into Usuarios (Nome_Usuario, Senha_Usuario, Email_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, Telefone_Usuario) values ('Funcionário 1', 'p4$$0W0rb', 'funcionariodiners1@gamil.com', 'usuario-n', 'funcionario', 'ativo', '(16) 98115-0536');
+
+# Inserindo os Produtos padrões
+insert into Produtos (ID_Usuario, Nome_Produto, Descricao_Produto, Composicao_Produto, Classe_Produto, Foto_Produto, Preco_Produto, Qt_Adiquirida, Qt_Vendida) values
+(1, 'Diinernífico', 'Um hambúrguer digno dos paladares mais exigentes, uma verdadeira obra-prima.', 'Pão de brioche, hambúrguer de angus, queijo cheddar, bacon crocante, cebola crispy, alface, tomate, maionese de alho.', 'Burger', 'images/burgers/Burger1.png', 28, 100, 0),
+
+(1, 'Diiner Tudo', 'Um delicioso hambúrguer para os gostos mais refinados e para os amantes de lanches artesanais.', 'Pão artesanal, carne, queijo, bacon, ovo, presunto, alface, tomate, cebola caramelizada, molho especial.', 'Burger', 'images/burgers/Burger2.png', 25, 100, 0),
+
+(1, 'Burger Heaven', 'Para os apaixonados por bacon, uma explosão de sabor.', 'Pão, carne, queijo, bacon, alface, tomate, maionese.', 'Burger', 'images/burgers/Burger3.png', 18, 100, 0),
+
+(1, 'Excellent Burgers', 'Perfeito para os amantes de ovos e lanches substanciais.', 'Pão, carne, queijo, ovo, alface, tomate, maionese.', 'Burger', 'images/burgers/Burger4.png', 20, 100, 0),
+
+(1, 'All-In Burger', 'Para os que querem tudo em um só lanche, uma experiência completa.', 'Pão, carne, queijo, bacon, ovo, alface, tomate, maionese, milho, ervilha, batata palha.', 'Burger', 'images/burgers/Burger5.png', 21, 100, 0),
+
+(1, 'Chicken Delight', 'Leve e saboroso, perfeito para os amantes de frango.', 'Pão, filé de frango, queijo, alface, tomate, maionese.', 'Burger', 'images/burgers/Burger6.png', 25, 100, 0),
+
+(1, 'Veggie Kingdom', 'Uma opção deliciosa e sustentável para os vegetarianos.', 'Pão integral, hambúrguer vegano, queijo vegano, alface, tomate, cebola roxa, maionese vegana.', 'Burger', 'images/burgers/Burger7.png', 27, 100, 0),
+
+(1, 'Prime Burger', 'Para os amantes de carnes nobres, uma experiência única.', 'Pão, hambúrguer de picanha, queijo, bacon, alface, tomate, maionese.', 'Burger', 'images/burgers/Burger8.png', 30, 100, 0),
+
+(1, 'Burger Palace', 'Um clássico irresistível para qualquer ocasião.', 'Pão, carne, queijo, alface, tomate, maionese.', 'Burger', 'images/burgers/Burger9.png', 25, 100, 0),
+
+(1, 'Refrigerante', 'Refrescante e delicioso.', 'Lata de refrigerante (Coca-Cola, Pepsi, Guaraná).', 'Bebida', 'images/bebidas/refrigerante.png', 5, 100, 0),
+
+(1, 'Refrigerante', 'Opção saudável e refrescante.', 'Suco natural de laranja, limão ou morango.', 'Bebida', 'images/bebidas/suco.png', 7, 100, 0),
+
+(1, 'Milkshake', 'Uma sobremesa em forma de bebida, perfeita para acompanhar seu lanche.', 'Milkshake de baunilha, chocolate ou morango', 'Sobremesa', 'images/sobremesas/milkshake.png', 10, 100, 0),
+
+(1, 'Cerveja Artesanal', 'Perfeita para acompanhar seu hambúrguer gourmet.', 'Cerveja artesanal IPA, Lager ou Stout.', 'Bebida', 'images/bebidas/cervejaartesanal.png', 15, 100, 0),
+
+(1, 'Frapuccino', 'A sobremesa perfeita para finalizar sua refeição.', 'Frapuccino de café, chocolate ou caramelo.', 'Sobremesa', 'images/sobremesas/frapuccino.png', 12, 100, 0),
+
+(1, 'Sorvete', 'Deliciosamente doce e perfeito para os chocólatras.', 'Sorvete de chocolate ou flocos.', 'Sobremesa', 'images/sobremesas/frapuccino.png', 9, 100, 0),
+
+(1, 'Cerveja', 'Perfeita para acompanhar seu hambúrguer.', 'Long-neck de cerveja (Heineken, Stella, Colorado).', 'Bebida', 'images/bebidas/cerveja.png', 10, 100, 0),
+
+(1, 'Água', 'A única que mata a sede de verdade.', 'Garrafa de água mineral (com ou sem gás).', 'Bebida', 'images/bebidas/agua.png', 4, 100, 0);
+

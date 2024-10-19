@@ -20,93 +20,6 @@ function mostrar_senha(idsenha, idbutton) {
 // Tornando a função disponível no escopo global
 window.mostrar_senha = mostrar_senha;
 
-// Função com API para retornar os valores do CEP
-async function dados_cep(cep, busca) {
-  try {
-
-      // Campos Bairro e Rua
-      const inputBairro = document.getElementById("bairro");
-      const inputLogradouro = document.getElementById("rua");
-
-      // Verificando se quantidade de caracteres do CEP é Valida
-      if (cep.length !== 9) {
-
-          // Mensagem de erro
-          document.getElementById("msgcep").textContent = "CEP Inválido!";
-
-          // Limpando os campos
-          inputBairro.value = "";
-          inputLogradouro.value = "";
-          document.getElementById("cidade").value = "";
-          document.getElementById("uf").value = "";
-
-          return { erroCep: 1 };
-      } else {
-
-          // Fazendo a consulta na API Via CEP
-          const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-          const dados = await resposta.json();
-
-          // Verificando se o CEP é valido (foi encontrado)
-          if (dados.erro) {
-
-              // Mensagem de erro
-              document.getElementById("msgcep").textContent = "CEP Inválido!";
-
-              // Limpando os campos
-              inputBairro.value = "";
-              inputLogradouro.value = "";
-              document.getElementById("cidade").value = "";
-              document.getElementById("uf").value = "";
-
-              return { erroCep: 1 };
-
-          } else {
-            document.getElementById("cidade").value = dados.localidade;
-            document.getElementById("uf").value = dados.uf;
-            document.getElementById("msgcep").textContent = "";
-
-            // Verificando se o CEP possui Bairro e Rua
-            // Se não possui bairro e a busca for a inical
-            if (!dados.bairro && busca === 1) {
-                inputBairro.readOnly = false;
-                inputBairro.value = "";
-
-            // Se possui bairro e a busca for a inical
-            } else if (dados.bairro && busca === 1) {
-                inputBairro.readOnly = true;
-                inputBairro.value = dados.bairro;
-
-            }else {
-                inputBairro.readOnly = true;
-            }
-
-            // Se não possui rua e a busca for a inical
-            if (!dados.logradouro && busca === 1) {
-                inputLogradouro.readOnly = false;
-                inputLogradouro.value = "";
-
-            // Se possui rua e a busca for a inical
-            } else if (dados.logradouro && busca === 1) {
-                inputLogradouro.readOnly = true;
-                inputLogradouro.value = dados.bairro;
-                
-            }else {
-                inputLogradouro.readOnly = true;
-            }
-
-            return { erroCep: 0 };
-          }
-      }
-  } catch (error) {
-      console.error('Erro ao consultar o CEP:', error);
-      return { erroCep: 1 };
-  }
-};
-
-// Tornando a função disponível no escopo global
-window.dados_cep = dados_cep;
-
 // Função para validar senha
 function validasenha(senha) {
 
@@ -258,29 +171,21 @@ async function cadastrar() {
 
   // Telefone e Celular
   const telefone = document.getElementById('telefone').value.trim();
-  const celular = document.getElementById('celular').value.trim();
 
   // Senhas
   const senha = document.getElementById('senha_cadastro').value.trim();
   const conSenha = document.getElementById('consenha_cadastro').value.trim();
 
-  // Endereço
-  const cep = document.getElementById('cep').value.trim();
-  const bairro = document.getElementById('bairro').value.trim();
-  const rua = document.getElementById('rua').value.trim();
-  const numero = document.getElementById('numero').value.trim();
-
   // Variaveis para executar e receber o resultados das validações das funções
   const emailValidacao = await validacaoEmail(email);
   const senhaValidacao = validasenha(senha);
   const consenhaValidacao = validaconsenha(senha, conSenha);
-  const cepValidacao = await dados_cep(cep, 2);
 
   // Verificando os resultados
-  if (emailValidacao.erroEmail === 0 && senhaValidacao.erroSenha === 0 && consenhaValidacao.erroConSenha === 0 && cepValidacao.erroCep === 0) {
+  if (emailValidacao.erroEmail === 0 && senhaValidacao.erroSenha === 0 && consenhaValidacao.erroConSenha === 0) {
 
       // Verificando se não há campos nulos
-      if (nome && bairro && rua && numero && telefone.length == 15 && celular.length == 15) {
+      if (nome && telefone.length == 15) {
 
         form.submit();
 
@@ -470,24 +375,13 @@ window.validaSessao = validaSessao;
 
             // Telefones
             document.getElementById('telefone').value = data.telefone;
-            document.getElementById('celular').value = data.celular;
 
             // Foto
             if (!data.foto){
                 document.getElementById('img_foto').src = "imagens/usuarios/usuario-n.png";
             }else{
                 document.getElementById('img_foto').src = "imagens/usuarios/" + data.foto;
-            }
-
-            // Endereço
-            document.getElementById('cep').value = data.cep;
-            document.getElementById('cidade').value = data.cidade;
-            document.getElementById('uf').value = data.uf;
-            document.getElementById('bairro').value = data.bairro;
-            document.getElementById('rua').value = data.rua;
-            document.getElementById('numero').value = data.numero;
-            document.getElementById('complemento').value = data.complemento;
-           
+            }       
 
         }else{
             window.location.href = '/login.html';

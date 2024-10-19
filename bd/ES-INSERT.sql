@@ -2,11 +2,13 @@ use Diners_Burguers;
 
 drop database diners_burguers;
 
-select * from Telefones;
-
 select * from Usuarios;
 
-DELETE FROM Telefones where ID_Telefone > 0;
+select * from Pedidos;
+
+select * from Produtos;
+
+DELETE FROM Pedidos where ID_Pedido > 0;
 
 DELETE FROM Usuarios where ID_Usuario > 1;
 

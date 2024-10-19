@@ -167,56 +167,45 @@ function updateCart() {
     }
 }
 
-function finalizarCompra() {
+async function finalizarCompra() {
         if (cart.length > 0) {
-          // Construindo a mensagem com os dados do pedido
-          let mensagem = "*Pedido:*\n";
+          
+          // Preparando para enviar o pedido para o cadastro
+          let idProdutosPedidos = [];
+          let quantProdutos = [];
+
           cart.forEach((item) => {
-            let produtoItem = produtosJson.find((produto) => produto.id == item.id);
-            let produtoSizeName;
-            switch (item.size) {
-              case 0:
-                produtoSizeName = "P";
-                break;
-              case 1:
-                produtoSizeName = "M";
-                break;
-              case 2:
-                produtoSizeName = "G";
-                break;
-            }
-            mensagem += `${produtoItem.name} (${produtoSizeName}) - Quantidade: ${item.qt}\n`;
+
+            idProdutosPedidos.push(item.id);
+            quantProdutos.push(item.qt);
+            
           });
-      
-          let subtotal = parseFloat(
-            document
-              .querySelector(".subtotal span:last-child")
-              .innerHTML.replace("R$ ", "")
-          );
-          let desconto = parseFloat(
-            document
-              .querySelector(".desconto span:last-child")
-              .innerHTML.replace("R$ ", "")
-          );
-          let total = parseFloat(
-            document
-              .querySelector(".total span:last-child")
-              .innerHTML.replace("R$ ", "")
-          );
-          mensagem += `\n*Subtotal:* R$ ${subtotal.toFixed(
-            2
-          )}\n*Desconto:* R$ ${desconto.toFixed(2)}\n*Total a pagar:* R$ ${total.toFixed(
-            2
-          )}`;
-      
-          // Formatando a mensagem para URL
-          let mensagemFormatada = encodeURIComponent(mensagem);
-      
-          // Construindo o link com a URI de compartilhamento do WhatsApp
-          let linkWhatsApp = `https://wa.me/5516988753083?text=${mensagemFormatada}`;
-      
-          // Abrindo o link no navegador
-          window.open(linkWhatsApp, "_blank");
+
+          let entregaNecessaria = 1;
+          let tipoPagamento = 'Cartão de Débito';
+          
+          // Executando a função para cadastrar o pedido
+            const response = await fetch('/cadastrar-pedido', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ entregaNecessaria, tipoPagamento, idProdutosPedidos, quantProdutos })
+            });
+
+            // Recebendo a resposta da verificação
+            const data = await response.json();
+
+            if (data.login){
+                return window.location.href = 'login.html';
+            }
+
+            if (data.enviado){
+                alert('Pedido Enviado');
+                return window.location.href = 'home_cliente.html';
+            }else{
+                alert('Pedido não Enviado');
+            }
         }
         
 };

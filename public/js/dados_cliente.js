@@ -72,89 +72,6 @@ async function comparar_senhas(senha_atual){
 
 };
 
-// Função com API para retornar os valores do CEP
-async function dados_cep_alt(cep, busca) {
-  try {
-
-      // Campos Bairro e Rua
-      const inputBairro = document.getElementById("bairro");
-      const inputLogradouro = document.getElementById("rua");
-
-      // Verificando se quantidade de caracteres do CEP é Valida
-      if (cep.length !== 9) {
-
-          // Mensagem de erro
-          document.getElementById("msgcep").textContent = "CEP Inválido!";
-
-          // Limpando os campos
-          inputBairro.value = "";
-          inputLogradouro.value = "";
-          document.getElementById("cidade").value = "";
-          document.getElementById("uf").value = "";
-
-          return { erroCep: 1 };
-      } else {
-
-          // Fazendo a consulta na API Via CEP
-          const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-          const dados = await resposta.json();
-
-          // Verificando se o CEP é valido (foi encontrado)
-          if (dados.erro) {
-
-              // Mensagem de erro
-              document.getElementById("msgcep").textContent = "CEP Inválido!";
-
-              // Limpando os campos
-              inputBairro.value = "";
-              inputLogradouro.value = "";
-              document.getElementById("cidade").value = "";
-              document.getElementById("uf").value = "";
-
-              return { erroCep: 1 };
-
-          } else {
-            document.getElementById("cidade").value = dados.localidade;
-            document.getElementById("uf").value = dados.uf;
-            document.getElementById("msgcep").textContent = "";
-
-            // Verificando se o CEP possui Bairro e Rua
-            // Se não possui bairro e a busca for a inical
-            if (!dados.bairro && busca === 1) {
-                inputBairro.readOnly = false;
-                inputBairro.value = "";
-
-            // Se possui bairro e a busca for a inical
-            } else if (dados.bairro && busca === 1) {
-                inputBairro.readOnly = true;
-                inputBairro.value = dados.bairro;
-
-            }else {
-                inputBairro.readOnly = true;
-            }
-
-            // Se não possui rua e a busca for a inical
-            if (!dados.logradouro && busca === 1) {
-                inputLogradouro.readOnly = false;
-                inputLogradouro.value = "";
-
-            // Se possui rua e a busca for a inical
-            } else if (dados.logradouro && busca === 1) {
-                inputLogradouro.readOnly = true;
-                inputLogradouro.value = dados.bairro;
-                
-            }else {
-                inputLogradouro.readOnly = true;
-            }
-
-            return { erroCep: 0 };
-          }
-      }
-  } catch (error) {
-      console.error('Erro ao consultar o CEP:', error);
-      return { erroCep: 1 };
-  }
-};
 
 // Função para validar senha
 function validasenhaalt(senha) {
@@ -313,24 +230,16 @@ async function alterarDadosUsuario() {
         document.getElementById('msgfoto').textContent = "";
     }
   
-    // Telefone e Celular
+    // Telefone
     const telefone = document.getElementById('telefone').value.trim();
-    const celular = document.getElementById('celular').value.trim();
   
     // Senhas
     const senhaAtual = document.getElementById('senha_atual').value.trim();
     const senhaNova = document.getElementById('senha_nova').value.trim();
   
-    // Endereço
-    const cep = document.getElementById('cep').value.trim();
-    const bairro = document.getElementById('bairro').value.trim();
-    const rua = document.getElementById('rua').value.trim();
-    const numero = document.getElementById('numero').value.trim();
-  
     // Variaveis para executar e receber o resultados das validações das funções
     const emailValidacao = await validacaoEmailAlt(email);
     const campSenhas = await comparar_senhas(senhaAtual);
-    const cepValidacao = await dados_cep_alt(cep, 2);
 
     // Verificando se foi desejavel a alteração de senha
     const altSenha = document.getElementById('alterar_senha').checked;
@@ -345,10 +254,10 @@ async function alterarDadosUsuario() {
     }
   
     // Verificando os resultados
-    if (emailValidacao.erroEmail === 0 &&  erroValidacaoSenha === 0 && campSenhas.erroSenhaAt === 0 && cepValidacao.erroCep === 0) {
+    if (emailValidacao.erroEmail === 0 &&  erroValidacaoSenha === 0 && campSenhas.erroSenhaAt === 0) {
   
         // Verificando se não há campos nulos
-        if (nome && bairro && rua && numero && telefone.length == 15 && celular.length == 15) {
+        if (nome && telefone.length == 15) {
   
           form.submit();
   
