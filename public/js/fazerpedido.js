@@ -196,7 +196,7 @@ async function finalizarCompra() {
             // Recebendo a resposta da verificação
             const data = await response.json();
 
-            if (data.login){
+            if (data.message == 'Sessão não Iniciada.'){
                 return window.location.href = 'login.html';
             }
 
@@ -209,3 +209,33 @@ async function finalizarCompra() {
         }
         
 };
+
+async function buscarTodosProdutos(){
+    
+    const tipoBusca = 'Todos';;
+    const response = await fetch('/buscar-produtos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tipoBusca })
+    });
+
+    // Recebendo a lista de produtos
+    /*const produtos = await response.json();
+
+    // Limpar o conteúdo atual do elemento 'array'
+    const arrayElement = document.getElementById('array');
+    arrayElement.innerHTML = '';
+
+    // Iterar sobre a lista de produtos e criar elementos para exibi-los
+    produtos.forEach(produto => {
+        const produtoElement = document.createElement('div');
+        produtoElement.innerHTML = `
+            <h3>${produto.name}</h3>
+            <p>Preço: ${produto.price}</p>
+            <p>Descrição: ${produto.description}</p>
+        `;
+        arrayElement.appendChild(produtoElement);
+    });*/
+}

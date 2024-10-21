@@ -73,7 +73,8 @@ app.post('/verificar-email', (req, res) => {
 
     conexao.query('SELECT Email_Usuario FROM Usuarios WHERE Email_Usuario = ?;', [email], (err, results) => {
         if (err) {
-            return res.status(500).json({ error: 'Erro ao consultar o banco de dados' });
+            console.error('Erro ao obter os dados do Usuário:', err);
+            return res.status(500).json({ message: 'Erro ao obter os dados do Usuário.' });
         }
 
         if (results.length > 0) {
@@ -105,7 +106,8 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
         const inserirUsuario = await new Promise((resolve, reject) => {
             conexao.query(cadastrarUsu, [nome, email, senhaHash, foto, nivel, status, telefone], (err, results) => {
                 if (err) {
-                    throw new Error('Erro no Cadastro do Usuário!');
+                    console.error('Erro no Cadastro do Usuário:', err);
+                    return res.status(500).json({ message: 'Erro no Cadastro do Usuário.' });
                 }
                 resolve(results.insertId);
             });
@@ -120,7 +122,8 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
         return res.redirect('/home_cliente.html');
 
     } catch (error) {
-        throw new Error(error.message);
+        console.error('Erro no Cadastro do Usuário:', err);
+        return res.status(500).json({ message: 'Erro no Cadastro do Usuário.' });
     }
 });
 
@@ -168,7 +171,8 @@ app.post('/verificar-login', async (req, res) => {
 
         // Verificando se não houve um erro na consulta
         if (err) {
-            return res.status(500).json({ error: 'Erro ao consultar o banco de dados!' });
+            console.error('Erro ao obter os dados do Usuário:', err);
+            return res.status(500).json({ message: 'Erro ao obter os dados do Usuário.' });
         }
 
         // Caso o email esteja cadastrado no BD
@@ -248,7 +252,8 @@ app.post('/buscar-dados-cliente', (req, res) => {
     conexao.query('SELECT * FROM Usuarios WHERE ID_Usuario = ?', [ID_Cliente], (err, results) => {
         // Verificando se houve um erro na consulta
         if (err) {
-            return res.status(500).json({ error: 'Erro ao consultar o Banco de Dados - Buscando Dados do Usuário!' });
+            console.error('Erro ao buscar os dados do Usuário:', err);
+            return res.status(500).json({ message: 'Erro ao buscar os dados do Usuário.' });
         }
 
         // Verificando se o ID do Usuário realmente existe
@@ -282,7 +287,8 @@ app.post('/sair-conta', (req, res) => {
     // Destrói a sessão do usuário
     req.session.destroy(err => {
         if (err) {
-            return res.status(500).json({ error: 'Erro ao encerrar a sessão!' });
+            console.error('Erro ao encerrar a Sessão:', err);
+            return res.status(500).json({ message: 'Erro ao encerrar a Sessão.' });
         }
 
         // Limpando cookies da sessão
@@ -314,6 +320,7 @@ app.post('/comparar-senhas', async (req, res) => {
 
 // Função para alterar os dados do Usuário com upload de imagem (Página Alterar Dados Usuário)
 app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, res) => {
+
     // Obtendo os dados do Formulário
     const { nome, email, telefone, senha_nova, alterar_senha, senha_atual, img_removida } = req.body;
 
@@ -333,7 +340,8 @@ app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, re
         const [user] = await new Promise((resolve, reject) => {
             conexao.query(userQuery, [ID_Cliente], (err, results) => {
                 if (err) {
-                    return reject(new Error('Erro ao obter os dados do usuário!'));
+                    console.error('Erro ao obter os dados do usuário para a alteração:', err);
+                    return res.status(500).json({ message: 'Erro ao obter os dados do usuário para a alteração.' });
                 }
                 resolve(results);
             });
@@ -374,7 +382,8 @@ app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, re
         await new Promise((resolve, reject) => {
             conexao.query(alterarUsu, [nome, senhaHash, email, foto, telefone, ID_Cliente], (err, results) => {
                 if (err) {
-                    return reject(new Error('Erro ao alterar os dados do usuário!'));
+                    console.error('Erro ao alterar os dados do Usuário:', err);
+                    return res.status(500).json({ message: 'Erro ao alterar os dados do Usuário.' });
                 }
                 resolve(results);
             });
@@ -383,9 +392,9 @@ app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, re
         // Redireciona para a página de dados do cliente após o sucesso
         return res.redirect('/dados_cliente.html');
 
-    } catch (error) {
-        console.error('Erro:', error);
-        return res.status(500).send('Erro ao alterar os dados do usuário.');
+    } catch (err) {
+        console.error('Erro ao alterar os dados do Usuário:', err);
+        return res.status(500).json({ message: 'Erro ao alterar os dados do Usuário.' });
     }
 });
 
@@ -401,7 +410,8 @@ app.post('/excluir-conta', async (req, res) => {
     const [user] = await new Promise((resolve, reject) => {
         conexao.query(userQuery, [ID_Cliente], (err, results) => {
             if (err) {
-                return reject(new Error('Erro ao obter os dados do usuário!'));
+                console.error('Erro ao obter a Foto do Usuário:', err);
+                return res.status(500).json({ message: 'Erro ao obter a Foto do Usuário.' });
             }
             resolve(results);
         });
@@ -425,7 +435,10 @@ app.post('/excluir-conta', async (req, res) => {
     const excluirQuery = 'DELETE FROM Usuarios where ID_Usuario = ?;';
         const excluir = await new Promise((resolve, reject) => {
             conexao.query(excluirQuery, [ID_Cliente], (err, results) => {
-                if (err) return reject(new Error('Erro ao excluir a conta!'));
+                if (err){
+                    console.error('Erro ao excluir a conta:', err);
+                    return res.status(500).json({ message: 'Erro ao excluir a conta.' });
+                }
                 resolve(results);
             });
         });
@@ -443,7 +456,7 @@ app.post('/cadastrar-pedido', async (req, res) => {
     // Verificando se a sessão está iniciada
     if (ID_Cliente == undefined) {
         console.log('Sessão não iniciada. Redirecionando para login.html');
-        return res.status(200).json({ login: true });
+        return res.status(200).json({ message: 'Sessão não Iniciada.' });
     }
 
     // Obtendo os dados do pedido enviados
@@ -460,7 +473,8 @@ app.post('/cadastrar-pedido', async (req, res) => {
         await new Promise((resolve, reject) => {
             conexao.query(buscaProduto, [idProdutosPedidos[i]], (err, results) => {
                     if (err) {
-                        throw new Error('Erro ao Buscar Produto!');
+                        console.error('Erro ao buscar preço do produto:', err);
+                        return res.status(500).json({ message: 'Erro ao buscar preço do produto.' });
                     }
                     
                     if (results.length > 0){
@@ -483,22 +497,41 @@ app.post('/cadastrar-pedido', async (req, res) => {
     const idPedido = await new Promise((resolve, reject) => {
         conexao.query(cadastarPedido, [ID_Cliente, subTotaPedido, totalPedido, desconto, 'Enviado', entregaNecessaria, tipoPagamento, horaInicio], (err, results) => {
             if (err) {
-                console.log(err);
-                return;
+                console.error('Erro ao cadastrar pedido:', err);
+                return res.status(500).json({ message: 'Erro ao cadastrar pedido.' });
             }
             resolve(results.insertId);
         });
     });
 
-    // Criando um loop para cadsatrar todos os intens do pedido
+    // Criando um loop para cadastrar todos os intens do pedido
     for (let i = 0; i < idProdutosPedidos.length; i++){
+
+        // Validação para ver se o código do produto existe na tabela de produtos
+        const verificaProduto = 'SELECT COUNT(*) AS count FROM Produtos WHERE ID_Produto = ?';
+
+        const produtoExiste = await new Promise((resolve, reject) => {
+            conexao.query(verificaProduto, [idProdutosPedidos[i]], (err, results) => {
+                if (err) {
+                    console.error('Erro ao buscar produto:', err);
+                    return res.status(500).json({ message: 'Erro ao buscar produto.' });
+                }
+                resolve(results[0].count > 0);
+            });
+        });
+    
+        if (!produtoExiste) {
+            console.error(`Produto com ID_Produto = ${idProdutosPedidos[i]} não existe na tabela Produtos.`);
+            return res.status(500).json({ message: 'Produto com ID_Produto = ${idProdutosPedidos[i]} não existe na tabela Produtos.' });
+        }
 
         const cadasIntensPedido = 'INSERT INTO Pedidos_Produtos (ID_Pedido, ID_Produto, Qt_Produto) VALUES (?,?,?);';
 
         await new Promise((resolve, reject) => {
             conexao.query(cadasIntensPedido, [idPedido, idProdutosPedidos[i], quantProdutos[i]], (err, results) => {
                     if (err) {
-                        throw new Error('Erro ao Cadastrar os itens do pedido!');
+                        console.error('Erro ao cadastrar itens do pedido:', err);
+                        return res.status(500).json({ message: 'Erro ao cadastrar itens do pedido.' });
                     }
                     resolve(results);
             });
@@ -507,6 +540,249 @@ app.post('/cadastrar-pedido', async (req, res) => {
 
     return res.status(200).json({ enviado: true });
 
+});
+
+
+// Função para buscar os produtos, a fim de mostrá-los no menu
+app.post('/buscar-produtos', async (req, res) => {
+
+    // Obtendo o tipo de busca, verificando se é para buscar todos os produtos ou os três mais vendidos
+    const { tipoBusca } = req.body;
+
+    // Verifica o tipo de busca, afim de saber se é para mostrar todos os produtos do menu ou para motrar somente os três Burgers mais vendidos.
+    if (tipoBusca == 'Todos') {
+
+        // Selecionando todos os produtos para a exibição no menu
+        const buscaProdutos = 'SELECT ID_Produto, Nome_Produto, Foto_Produto, Classe_Produto, Descricao_Produto, Composicao_Produto, Preco_Produto FROM Produtos;';
+
+        try {
+
+            // Realizando a busca
+            const results = await new Promise((resolve, reject) => {
+                conexao.query(buscaProdutos, (err, results) => {
+                    if (err) {
+                        console.error('Erro ao buscar os produtos:', err);
+                        return res.status(500).json({ message: 'Erro ao buscar os produtos.' });
+                    }
+
+                    resolve(results);
+                });
+            });
+
+            // Verificando se há pelo menos um rpoduto cadastrado
+            if (results.length > 0) {
+
+                // Mapeia os resultados para um array de objetos no formato desejado
+                const produtos = results.map(produto => ({
+                    id: produto.ID_Produto,
+                    name: produto.Nome_Produto,
+                    image: produto.Foto_Produto,
+                    category: produto.Classe_Produto,
+                    description: produto.Composicao_Produto,
+                    tipo: produto.Descricao_Produto,  
+                    price: produto.Preco_Produto
+                }));
+
+                console.log(produtos);
+
+                // Envia a lista de produtos no formato correto para o cliente
+                return res.status(200).json(produtos);
+            } else {
+
+                // retornando erro pois não há nenhum produto cadastrado
+                console.log('Nenhum produto encontrado.');
+                return res.status(404).json({ message: 'Nenhum produto encontrado.' });
+            }
+
+
+        //  Erro ao buscar no BD
+        } catch (error) {
+            console.error('Erro ao buscar os produtos:', error);
+            return res.status(500).json({ message: 'Erro ao buscar os produtos.' });
+        }
+
+    
+    // Buscando os três Burgers mais vendidos para exibi-los na página incial
+    }else if (tipoBusca == 'Burgers Mais Vendidos'){
+
+        // Obtendo os ID's dos três Burgers mais vendidos
+        const produtosMaisVendidos = 'SELECT p.ID_Produto, SUM(pp.Qt_Produto) AS TotalVendido FROM Pedidos_Produtos pp JOIN Produtos p ON pp.ID_Produto = p.ID_Produto WHERE p.Classe_Produto = "Burger" GROUP BY p.ID_Produto ORDER BY TotalVendido DESC LIMIT 3;';
+
+        try {
+
+            // Realizando a busca
+            const results = await new Promise((resolve, reject) => {
+                conexao.query(produtosMaisVendidos, (err, results) => {
+                    if (err) {
+                        console.error('Erro ao buscar os Burgers mais vendidos:', err);
+                        return res.status(500).json({ message: 'Erro ao buscar os Burgers mais vendidos.' });
+                    }
+
+                    resolve(results);
+                });
+            });
+
+
+            // Verificando se há ao menos 3 Burgers para serem exibidos, caso contrário exibirá três aleatórios
+            if (results.length >= 3) {
+
+                const buscaProdutos = 'SELECT Nome_Produto, Foto_Produto, Composicao_Produto, Preco_Produto FROM Produtos WHERE ID_Produto = 3 or ID_Produto = 2 or ID_Produto = 8 LIMIT 3;';
+
+                try {
+                    const results = await new Promise((resolve, reject) => {
+                        conexao.query(buscaProdutos, (err, results) => {
+                            if (err) {
+                                console.error('Erro ao buscar os Burgers mais vendidos:', err);
+                                return res.status(500).json({ message: 'Erro ao buscar os Burgers mais vendidos.' });
+                            }
+
+                            resolve(results);
+                        });
+                    });
+
+                    if (results.length >= 3) {
+
+                        // Mapeia os resultados para um array de objetos no formato desejado
+                        const produtos = results.map(produto => ({
+                            name: produto.Nome_Produto,
+                            image: produto.Foto_Produto,
+                            description: produto.Composicao_Produto,
+                            price: produto.Preco_Produto
+                        }));
+
+                        console.log(produtos);
+
+                        // Envia a lista de produtos no formato correto para o cliente
+                        return res.status(200).json(produtos);
+                    } else {
+                        console.log('Nenhum Burguer encontrado.');
+                        return res.status(404).json({ message: 'Nenhum Burguer encontrado.' });
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao buscar os Burgers mais vendidos:', error);
+                    return res.status(500).json({ message: 'Erro ao buscar os Burgers mais vendidos.' });
+                }
+            
+            // Buscando três Burgers aleatórios para exibi-los, já que não tem os três mais vendidos
+            } else {
+                
+                const buscaProdutos = 'SELECT Nome_Produto, Foto_Produto, Composicao_Produto, Preco_Produto FROM Produtos WHERE Classe_Produto = "Burger" LIMIT 3;';
+
+                try {
+                    const results = await new Promise((resolve, reject) => {
+                        conexao.query(buscaProdutos, (err, results) => {
+                            if (err) {
+                                console.error('Erro ao buscar os Burgers mais vendidos', err);
+                                return res.status(500).json({ message: 'Erro ao buscar os Burgers mais vendidos.' });
+                            }
+
+                            resolve(results);
+                        });
+                    });
+
+                    // Verificanndo se há pelo menos 3
+                    if (results.length >= 3) {
+
+                        // Mapeia os resultados para um array de objetos no formato desejado
+                        const produtos = results.map(produto => ({
+                            name: produto.Nome_Produto,
+                            image: produto.Foto_Produto,
+                            description: produto.Composicao_Produto,
+                            price: produto.Preco_Produto
+                        }));
+
+                        console.log(produtos);
+
+                        // Envia a lista de produtos no formato correto para o cliente
+                        return res.status(200).json(produtos);
+                    } else {
+                        console.log('Burgers mais vendidos menor do que 3.');
+                        return res.status(404).json({ message: 'Burgers mais vendidos menor do que 3.' });
+                    }
+
+                } catch (error) {
+                    console.error('Erro ao buscar os Burgers mais vendidos:', error);
+                    return res.status(500).json({ message: 'Erro ao buscar os Burgers mais vendidos.' });
+                }
+                
+            }
+
+        } catch (error) {
+            console.error('Erro ao processar a busca de produtos mais vendidos:', error);
+            return res.status(500).json({ message: 'Erro ao buscar os Burgers mais vendidos.' });
+        }
+    }
+});
+
+
+// Função para buscar as melhores avaliações dos Clientes
+app.post('/buscar-avaliacoes', async (req, res) => {
+
+    // Obtendo o tipo de busca, verificando se é para buscar todos os produtos ou os três mais vendidos
+    const { tipoBusca } = req.body;
+
+    // Verifica o tipo de busca, afim de saber se é para mostrar todos os produtos do menu ou para motrar somente os três Burgers mais vendidos.
+    if (tipoBusca == '3 Melhores') {
+
+        // Selecionando todos os produtos para a exibição no menu
+        const buscaAvaliacoes = 'SELECT ID_Usuario, Nota_Avaliacao, Data_Avaliacao, Comentario_Avaliacao FROM Avaliacoes ORDER BY Nota_Avaliacao DESC LIMIT 3;';
+
+        try {
+
+            // Realizando a busca
+            const results = await new Promise((resolve, reject) => {
+                conexao.query(buscaAvaliacoes, (err, results) => {
+                    if (err) {
+                        console.error('Erro ao buscar as avaliações dos Usuários:', err);
+                        return res.status(500).json({ message: 'Erro ao buscar as avaliações dos Usuários.' });
+                    }
+                    resolve(results);
+                });
+            });
+
+            const buscaClientes =  'SELECT Nome_Usuario, Foto_Usuario FROM Usuarios WHERE ID_Usuario = ? OR ID_Usuario = ? OR ID_Usuario = ?;';
+
+            const resultsClientes = await new Promise((resolve, reject) => {
+                conexao.query(buscaClientes, [results[0].ID_Usuario, results[1].ID_Usuario, results[2].ID_Usuario], (err, resultsClientes) => {
+                    if (err) {
+                        console.error('Erro ao buscar os dados dos Clientes:', err);
+                        return res.status(500).json({ message: 'Erro ao buscar os dados dos Clientes.' });
+                    }
+                    resolve(resultsClientes);
+                });
+            });
+
+            // Verificando se há pelo menos três avaliações cadastradas
+            if (results.length >= 3) {
+
+                // Mapeia os resultados das avaliações para um array de objetos no formato desejado
+                const avaliacoes = results.map(avaliacao => ({
+                    nota: avaliacao.Nota_Avaliacao,
+                    data: avaliacao.Data_Avaliacao,
+                    comentario: avaliacao.Comentario_Avaliacao
+                }));
+
+                // Mapeia os dados do cliente para um array de objetos no formato desejado
+                const dadosClientes = resultsClientes.map(cliente => ({
+                    nome: cliente.Nome_Usuario,
+                    foto: cliente.Foto_Usuario
+                }));
+
+                // Envia a lista de avaliações no formato correto para o cliente
+                return res.status(200).json({ avaliacoes: avaliacoes, dadosClientes: dadosClientes});
+            } else {
+
+                // retornando erro pois não há nenhum produto cadastrado
+                console.log('Nenhum avaliação encontrada.');
+                return res.status(404).json({ message: 'Nenhum avaliação encontrada.' });
+            }
+
+        } catch (error) {
+            console.error('Erro ao processar a busca de produtos:', error);
+            return res.status(500).json({ message: 'Erro ao buscar os produtos.' });
+        }
+    }
 });
 
 // Iniciar o servidor

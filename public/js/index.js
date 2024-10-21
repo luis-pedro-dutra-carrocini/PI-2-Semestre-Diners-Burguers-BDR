@@ -141,3 +141,77 @@ L.marker([-20.543594, -47.397108])
   .addTo(map)
   .bindPopup("Av. Alonso Y Alonso n° 0000<br> Estamos esperando por você!")
   .openPopup();
+
+
+// Função para buscar os três Burger mais vendidos, afim de exibi-los na página
+async function buscarTodosProdutos(){
+    
+    const tipoBusca = 'Burgers Mais Vendidos';;
+    const response = await fetch('/buscar-produtos', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ tipoBusca })
+    });
+
+    // Recebendo a lista de produtos
+    const produtos = await response.json();
+
+    // Limpar o conteúdo atual do elemento 'array'
+    const arrayElement = document.getElementById('array');
+    arrayElement.innerHTML = '';
+
+    // Iterar sobre a lista de produtos e criar elementos para exibi-los
+    produtos.forEach(produto => {
+        const produtoElement = document.createElement('div');
+        produtoElement.innerHTML = `
+            <h3>${produto.name}</h3>
+            <p>Preço: ${produto.price}</p>
+            <p>Descrição: ${produto.description}</p><br>
+        `;
+        arrayElement.appendChild(produtoElement);
+    });
+}
+
+
+// Função para buscar as três melhores avaliações dos usuárioss, afim de exibi-las na página
+async function buscarAvaliacoes(){
+    
+  const tipoBusca = '3 Melhores';;
+  const response = await fetch('/buscar-avaliacoes', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ tipoBusca })
+  });
+
+  // Recebendo as avaliações
+  const dadosAvaliacoes = await response.json();
+
+  // Limpar o conteúdo atual do elemento 'array'
+  const arrayElement = document.getElementById('array2');
+  arrayElement.innerHTML = '';
+
+  // Iterar sobre a lista de avaliacoes e criar elementos para exibi-los
+  dadosAvaliacoes.avaliacoes.forEach(avaliacao => {
+      const produtoElement = document.createElement('div');
+      produtoElement.innerHTML = `
+          <p>Nota: ${avaliacao.nota}</p>
+          <p>Comentário: ${avaliacao.comentario}</p>
+          <p>Data: ${avaliacao.data}</p><br>
+      `;
+      arrayElement.appendChild(produtoElement);
+  });
+
+  // Iterar sobre a lista dos usuários das avaliacoes e criar elementos para exibi-los
+  dadosAvaliacoes.dadosClientes.forEach(cliente => {
+    const produtoElement = document.createElement('div');
+    produtoElement.innerHTML = `
+        <p>Nome: ${cliente.nome}</p>
+        <p>Foto: ${cliente.foto}</p><br>
+    `;
+    arrayElement.appendChild(produtoElement);
+});
+}

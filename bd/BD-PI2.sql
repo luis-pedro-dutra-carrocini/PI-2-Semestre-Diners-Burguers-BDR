@@ -18,7 +18,7 @@ create table Avaliacoes(
  ID_Avaliacao int auto_increment primary key,
  ID_Usuario int not null,
  Nota_Avaliacao int not null,
- Titulo_Avaliacao varchar(30) not null,
+ Data_Avaliacao date not null,
  Comentario_Avaliacao text not null,
  foreign key(ID_Usuario) references Usuarios(ID_Usuario)
 );
@@ -117,7 +117,8 @@ create table Favoritos(
 );
 
 # Inserindo usuario padrão (Funcionário) para o cadastro dos produtos
-insert into Usuarios (Nome_Usuario, Senha_Usuario, Email_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, Telefone_Usuario) values ('Funcionário 1', 'p4$$0W0rb', 'funcionariodiners1@gamil.com', 'usuario-n', 'funcionario', 'ativo', '(16) 98115-0536');
+insert into Usuarios (Nome_Usuario, Senha_Usuario, Email_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, Telefone_Usuario) values ('Funcionário 1', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'funcionariodiners1@gmail.com', 'usuario-n', 'funcionario', 'ativo', '(16) 98115-0536');
+# Senha = p4$$0W0rb;
 
 # Inserindo os Produtos padrões
 insert into Produtos (ID_Usuario, Nome_Produto, Descricao_Produto, Composicao_Produto, Classe_Produto, Foto_Produto, Preco_Produto, Qt_Adiquirida, Qt_Vendida) values
@@ -155,3 +156,16 @@ insert into Produtos (ID_Usuario, Nome_Produto, Descricao_Produto, Composicao_Pr
 
 (1, 'Água', 'A única que mata a sede de verdade.', 'Garrafa de água mineral (com ou sem gás).', 'Bebida', 'images/bebidas/agua.png', 4, 100, 0);
 
+# Iserindo três Usuários padrões para a exibição de suas Avaliações
+insert into Usuarios (Nome_Usuario, Senha_Usuario, Email_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, Telefone_Usuario) values 
+('João', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'joao@gamil.com', '1727647444256-497557413.jpg', 'cliente', 'ativo', '(16) 99999-9999'),
+('Maria', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'maria@gamil.com', '1727647505453-480266063.jpg', 'cliente', 'ativo', '(16) 88888-8888'),
+('José', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'jose@gamil.com', '1727647562426-777290197.jpg', 'cliente', 'ativo', '(16) 77777-7777');
+
+# Senhas = p4$$0W0rb;
+
+# Inserindo as suas avaliações
+insert into Avaliacoes (ID_Usuario, Nota_Avaliacao, Data_Avaliacao, Comentario_Avaliacao) values
+(2, 10, '2024-10-20', 'A melhor hamburgueria da cidade!'),
+(3, 8, '2024-10-20', 'O atendimento é excelente!'),
+(4, 7, '2024-10-20', 'Os lanches são maravilhosos!');
