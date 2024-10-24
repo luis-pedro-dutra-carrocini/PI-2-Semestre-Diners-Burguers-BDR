@@ -17,6 +17,9 @@ const fs = require('fs');
 const path = require('path');
 const { error } = require('console');
 
+const cors = require('cors');
+
+
 // ---- Fim ----
 
 // Configurações de Funções
@@ -31,6 +34,8 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false } // Use secure: true se estiver usando HTTPS
 }));
+
+
 
 
 // Configuração do multer para armazenar as imagens
@@ -65,6 +70,13 @@ app.use(express.static('public'));
 
 // Servindo a pasta de imagens
 app.use('/public/imagens/usuarios', express.static('public/imagens/usuarios'));
+
+app.use(cors());
+
+app.use(cors({
+    origin: 'http://localhost:5173',  // Permitir requisições apenas do seu frontend
+    credentials: true  // Se estiver usando cookies ou autenticação via credenciais
+}));
 
 
 // Função para verificar se o email já está cadastrado no banco de dados (Página Cadastrar, Login e Alterar Dados Usuário)
@@ -128,9 +140,14 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
 });
 
 
+
+
 // Função para verificar o Login (Página Login)
 app.post('/verificar-login', async (req, res) => {
     const { email, senha } = req.body;
+
+    console.log(email);
+    console.log(senha);
 
     // Inicialize o contador de tentativas e tempo de espera na sessão, se ainda não existir
     if (!req.session.tentativas) {
@@ -189,11 +206,16 @@ app.post('/verificar-login', async (req, res) => {
 
             if (resultado === true) {
 
+                console.log('Login Validado');
+
                 // Zerando o contador de tentativas
                 req.session.tentativas = 0;
 
                 // Iniciando a sessão com o ID do Usuário
                 req.session.clienteID = ID_Usuario;
+
+                
+                console.log(req.session.clienteID);
 
                 return res.status(200).json({ validacao: true });
 
@@ -223,10 +245,10 @@ app.post('/verificar-sessao', (req, res) => {
     // Verificando se o ID do cliente existe na sessão
     if (req.session.clienteID) {
         console.log('Sessão Validada');
-        res.status(200).json({ sessaoIniciada: true, clienteID: req.session.clienteID });
+        return res.status(200).json({ sessaoIniciada: true, clienteID: req.session.clienteID });
     } else {
-        res.status(200).json({ sessaoIniciada: false });
         console.log('Sessão Não Validada');
+        return res.status(200).json({ sessaoIniciada: false });
     }
 });
 
@@ -234,18 +256,22 @@ app.post('/verificar-sessao', (req, res) => {
 // Criando uma variavel para guardar a senha criptografada e cadastrada, para ser comparada em outras ocasiões
 var senha_cadastrada = "";
 
-// Criando uma variável para guardarr a ultima foto
+// Criando uma variável para guardar a ultima foto
 var fotoUsuOriginal = "";
 
 // Função para buscar os dados do cliente (Página Alterar Dados Usuário)
 app.post('/buscar-dados-cliente', (req, res) => {
 
+    console.log('Chegou Busca');
+
     // Obtendo o ID do Cliente da sessão
     const ID_Cliente = req.session.clienteID;
 
+    console.log(ID_Cliente);
+
     // Verificando se o ID do Cliente existe na sessão
     if (!ID_Cliente) {
-        return res.status(401).json({ error: 'Sessão não iniciada!' });
+        return res.status(401).json({ message: 'Sessão não iniciada!' });
     }
 
     // Buscando os dados relacionados ao ID
