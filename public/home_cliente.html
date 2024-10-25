@@ -21,9 +21,11 @@
     <!-- Importando arquivos js front-end -->
     <script src="./js/geral.js"></script>
     <script src="./js/cadastrar-login.js"></script>
+    <script src="./js/home_cliente.js"></script>
 
     <!-- Função para validar se a sessão foi iniciada -->
     <script>window.onload = validaSessao();</script>
+    <script>window.onload = buscarPedidos();</script>
 
   </head>
   <body>
@@ -72,6 +74,9 @@
     </div>
 
     <div style="padding: 7px; width: 100%; margin-top: 5px; text-align: center;"><b>Página em Desenvolvimento. Volte no próximo semestre.</b></div>
+
+    <div id="array"></div>
+
     <footer>
         <p>© Copyright by <a href="https://github.com/luis-pedro-dutra-carrocini" target="_blank" >Luís Pedro</a></p>
     </footer>

@@ -13,17 +13,24 @@ const session = require('express-session');
 
 // Requerindo multer e path (upload de arquivos no servidor)
 const multer = require('multer');
+
+// Requirindo fs
 const fs = require('fs');
+
+// Requirindo path
 const path = require('path');
+
+// Requirindo console
 const { error } = require('console');
 
+// Requirindo cors
 const cors = require('cors');
 
+// Requirindo axios
+const axios = require('axios');
 
-// ---- Fim ----
 
 // Configurações de Funções
-
 const app = express();
 app.use(express.json());
 
@@ -31,12 +38,17 @@ app.use(express.json());
 app.use(session({
     secret: 'sua-chave-secreta',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: { secure: false } // Use secure: true se estiver usando HTTPS
 }));
 
+// Servir arquivos estáticos (HTML, JS, CSS)
+app.use(express.static('public'));
 
+// Servindo a pasta de imagens
+app.use('/public/imagens/usuarios', express.static('public/imagens/usuarios'));
 
+app.use(cors());
 
 // Configuração do multer para armazenar as imagens
 const storage = multer.diskStorage({
@@ -65,21 +77,16 @@ const upload = multer({
     }
 });
 
-// Servir arquivos estáticos (HTML, JS, CSS)
-app.use(express.static('public'));
+// Criando uma variavel para guardar a senha criptografada e cadastrada, para ser comparada em outras ocasiões
+var senha_cadastrada = "";
 
-// Servindo a pasta de imagens
-app.use('/public/imagens/usuarios', express.static('public/imagens/usuarios'));
-
-app.use(cors());
-
-app.use(cors({
-    origin: 'http://localhost:5173',  // Permitir requisições apenas do seu frontend
-    credentials: true  // Se estiver usando cookies ou autenticação via credenciais
-}));
+// Criando uma variável para guardar a ultima foto
+var fotoUsuOriginal = "";
 
 
-// Função para verificar se o email já está cadastrado no banco de dados (Página Cadastrar, Login e Alterar Dados Usuário)
+// ---- Funções/API's ---- //
+
+// API para verificar se o email já está cadastrado no banco de dados (Página Cadastrar, Login e Alterar Dados Usuário)
 app.post('/verificar-email', (req, res) => {
     const { email } = req.body;
 
@@ -98,7 +105,7 @@ app.post('/verificar-email', (req, res) => {
 });
 
 
-// Função para cadastrar o Usuário com upload de imagem (Página Cadastrar Usuário)
+// API para cadastrar o Usuário com upload de imagem (Página Cadastrar Usuário)
 app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) => {
     
     const { nome, email, telefone, senha_cadastro } = req.body;
@@ -140,9 +147,7 @@ app.post('/cadastrar-usuario', upload.single('foto_usuario'), async (req, res) =
 });
 
 
-
-
-// Função para verificar o Login (Página Login)
+// API para verificar o Login (Página Login)
 app.post('/verificar-login', async (req, res) => {
     const { email, senha } = req.body;
 
@@ -239,13 +244,34 @@ app.post('/verificar-login', async (req, res) => {
 });
 
 
-// Função para validar se a sessão foi iniciada (Todas as Páginas em que o Uuário precisa estar Logado)
+// API para validar se a sessão foi iniciada (Todas as Páginas em que o Usuário precisa estar Logado)
 app.post('/verificar-sessao', (req, res) => {
+
+    console.log(req.session.clienteID);
     
     // Verificando se o ID do cliente existe na sessão
     if (req.session.clienteID) {
         console.log('Sessão Validada');
-        return res.status(200).json({ sessaoIniciada: true, clienteID: req.session.clienteID });
+
+        // Buscando os dados relacionados ao ID
+        conexao.query('SELECT * FROM Usuarios WHERE ID_Usuario = ?', [req.session.clienteID], (err, results) => {
+            // Verificando se houve um erro na consulta
+            if (err) {
+                console.error('Erro ao buscar Usuário para validação:', err);
+                return res.status(500).json({ message: 'Erro ao buscar Usuário para validação.' });
+            }
+
+            // Verificando se o ID do Usuário realmente existe
+            if (results.length > 0) {
+
+                return res.status(200).json({ sessaoIniciada: true, clienteID: req.session.clienteID });
+                
+            } else {
+                console.log('Cliente não cadastrado!');
+                return res.status(401).json({ message: 'Cliente não cadastrado!' });
+            }
+        });
+
     } else {
         console.log('Sessão Não Validada');
         return res.status(200).json({ sessaoIniciada: false });
@@ -253,37 +279,41 @@ app.post('/verificar-sessao', (req, res) => {
 });
 
 
-// Criando uma variavel para guardar a senha criptografada e cadastrada, para ser comparada em outras ocasiões
-var senha_cadastrada = "";
-
-// Criando uma variável para guardar a ultima foto
-var fotoUsuOriginal = "";
-
-// Função para buscar os dados do cliente (Página Alterar Dados Usuário)
-app.post('/buscar-dados-cliente', (req, res) => {
+// API para buscar os dados do cliente (Página Alterar Dados Usuário)
+app.post('/buscar-dados-cliente', async (req, res) => {
 
     console.log('Chegou Busca');
 
-    // Obtendo o ID do Cliente da sessão
-    const ID_Cliente = req.session.clienteID;
+    try {
+        // Chama a API de verificação de sessão
+        const verificarSessaoResponse = await axios.post('http://localhost:3000/verificar-sessao', {}, {
+            headers: {
+                Cookie: req.headers.cookie // Passando os cookies da sessão
+            }
+        });
 
-    console.log(ID_Cliente);
+        const sessaoIniciada = verificarSessaoResponse.data.sessaoIniciada;
 
-    // Verificando se o ID do Cliente existe na sessão
-    if (!ID_Cliente) {
-        return res.status(401).json({ message: 'Sessão não iniciada!' });
-    }
-
-    // Buscando os dados relacionados ao ID
-    conexao.query('SELECT * FROM Usuarios WHERE ID_Usuario = ?', [ID_Cliente], (err, results) => {
-        // Verificando se houve um erro na consulta
-        if (err) {
-            console.error('Erro ao buscar os dados do Usuário:', err);
-            return res.status(500).json({ message: 'Erro ao buscar os dados do Usuário.' });
+        if (!sessaoIniciada) {
+            console.log('Sessão não iniciada!');
+            return res.status(401).json({ message: 'Sessão não iniciada!' });
         }
 
-        // Verificando se o ID do Usuário realmente existe
-        if (results.length > 0) {
+        // Obtendo o ID do Cliente da resposta de verificação de sessão
+        const ID_Cliente = verificarSessaoResponse.data.clienteID;
+
+        console.log(ID_Cliente);
+
+        // Buscando os dados relacionados ao ID
+        conexao.query('SELECT * FROM Usuarios WHERE ID_Usuario = ?', [ID_Cliente], (err, results) => {
+            // Verificando se houve um erro na consulta
+            if (err) {
+                console.error('Erro ao buscar os dados do Usuário:', err);
+                return res.status(500).json({ message: 'Erro ao buscar os dados do Usuário.' });
+            }
+
+            // Verificando se o ID do Usuário realmente existe
+            if (results.length > 0) {
 
                 // Obtendo a senha do Usuário Cadastrado
                 senha_cadastrada = results[0].Senha_Usuario;
@@ -299,12 +329,20 @@ app.post('/buscar-dados-cliente', (req, res) => {
                     foto: results[0].Foto_Usuario,
                     telefone: results[0].Telefone_Usuario
                 });
-        }
-    });
+            } else {
+                console.log('Cliente não cadastrado!');
+                return res.status(401).json({ message: 'Cliente não cadastrado!' });
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao verificar a sessão:', error);
+        return res.status(500).json({ message: 'Erro ao verificar a sessão.' });
+    }
 });
 
 
-// Função para sair da conta (Todas as Páginas)
+
+// API para sair da conta (Todas as Páginas)
 app.post('/sair-conta', (req, res) => {
 
     // Apagando a senha
@@ -326,7 +364,7 @@ app.post('/sair-conta', (req, res) => {
 });
 
 
-// Função para comparar as senha antes de altera-la (Página Alterar Dados Usuário)
+// API para comparar as senha antes de altera-la (Página Alterar Dados Usuário)
 app.post('/comparar-senhas', async (req, res) => {
 
     // Obtendo a senha a ser comparada
@@ -344,7 +382,7 @@ app.post('/comparar-senhas', async (req, res) => {
 });
 
 
-// Função para alterar os dados do Usuário com upload de imagem (Página Alterar Dados Usuário)
+// API para alterar os dados do Usuário com upload de imagem (Página Alterar Dados Usuário)
 app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, res) => {
 
     // Obtendo os dados do Formulário
@@ -425,7 +463,7 @@ app.post('/alterar-dados-usuario', upload.single('foto_usuario'), async (req, re
 });
 
 
-// Função para excluir a conta do Usuário (Aterar dados Cliente)
+// API para excluir a conta do Usuário (Aterar dados Cliente)
 app.post('/excluir-conta', async (req, res) => {
 
     // Obtendo o ID do Cliente da sessão
@@ -473,7 +511,7 @@ app.post('/excluir-conta', async (req, res) => {
 
 });
 
-// Função para cadastrar o pedido do cliente
+// API para cadastrar o pedido do cliente
 app.post('/cadastrar-pedido', async (req, res) => {
 
     // Obtendo o ID do Cliente da sessão
@@ -568,8 +606,69 @@ app.post('/cadastrar-pedido', async (req, res) => {
 
 });
 
+// API para buscaar os pedidos cadastrados dos Clientes
+app.post('/buscar-pedidos-clientes', async (req, res) => {
 
-// Função para buscar os produtos, a fim de mostrá-los no menu
+    try {
+        // Chama a API de verificação de sessão
+        const verificarSessaoResponse = await axios.post('http://localhost:3000/verificar-sessao', {}, {
+            headers: {
+                Cookie: req.headers.cookie // Passando os cookies da sessão
+            }
+        });
+
+        const sessaoIniciada = verificarSessaoResponse.data.sessaoIniciada;
+
+        // Valida a sessão
+        if (!sessaoIniciada) {
+            console.log('Sessão não iniciada!');
+            return res.status(401).json({ message: 'Sessão não iniciada!' });
+        }
+
+        // Obtendo o ID do Cliente da resposta de verificação de sessão
+        const ID_Cliente = verificarSessaoResponse.data.clienteID;
+
+        // Buscando os pedidos do Cliente no BD
+        const buscaPedidos = 'SELECT * FROM Pedidos WHERE ID_Usuario = ?;';
+
+        const pedidosCliente = await new Promise((resolve, reject) => {
+            conexao.query(buscaPedidos, [ID_Cliente], (err, results) => {
+                    if (err) {
+                        console.error('Erro ao buscar os pedidos:', err);
+                        return res.status(500).json({ message: 'Erro ao buscar os pedidos.' });
+                    }
+                    resolve(results);
+            });
+        });
+
+        // Mapeia os resultados para um array de objetos no formato desejado
+        const pedidos = pedidosCliente.map(pedido => ({
+            id: pedido.ID_Pedido,
+            subTotal: pedido.SubTotal_Pedido,
+            total: pedido.Total_Pedido,
+            desconto: pedido.Desconto_Pedido,
+            status: pedido.Status_Pedido,
+            entrega: pedido.Entrega_Necessaria,  
+            pagamento: pedido.Tipo_Pagamento,
+            tempoEstipulado: pedido.Tempo_Estipulado,  
+            inicio: pedido.Hora_Inicio,  
+            fim: pedido.Hora_Fim,  
+            tempoGasto: pedido.Tempo_Gasto  
+        }));
+
+        // Retornando os pedidos
+        console.log(pedidos);
+        return res.status(200).json(pedidos);
+
+    } catch (error) {
+        console.error('Erro ao buscar pedidos:', error);
+        return res.status(500).json({ message: 'Erro ao buscar pedidos.' });
+    }
+
+});
+
+
+// API para buscar os produtos, a fim de mostrá-los no menu
 app.post('/buscar-produtos', async (req, res) => {
 
     // Obtendo o tipo de busca, verificando se é para buscar todos os produtos ou os três mais vendidos
@@ -742,7 +841,7 @@ app.post('/buscar-produtos', async (req, res) => {
 });
 
 
-// Função para buscar as melhores avaliações dos Clientes
+// API para buscar as melhores avaliações dos Clientes
 app.post('/buscar-avaliacoes', async (req, res) => {
 
     // Obtendo o tipo de busca, verificando se é para buscar todos os produtos ou os três mais vendidos
