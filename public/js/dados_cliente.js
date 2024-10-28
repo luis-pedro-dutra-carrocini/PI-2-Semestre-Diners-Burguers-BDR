@@ -34,7 +34,7 @@ arquivo_foto.addEventListener('change', function(event) {
       // Lê o arquivo como uma URL para exibir
       reader.readAsDataURL(file);
 
-      img_removida.value = "0";
+      img_removida.value = "mantem";
 
     }
 });
@@ -42,7 +42,7 @@ arquivo_foto.addEventListener('change', function(event) {
 // Função para retirar a imagem selecionada
 function retirar_foto(){
     // Reseta o campo de arquivo
-    document.getElementById('img_removida').value = "1";
+    document.getElementById('img_removida').value = "nula";
     arquivo_foto.value = '';
     exibir_foto.src = "./imagens/usuarios/usuario-n.png";
 }
@@ -273,10 +273,10 @@ async function alterarDadosUsuario() {
   async function excluirConta(){
 
     // Recebendo a senha
-    const senhaAtual = document.getElementById('senha_atual').value.trim();
+    const senha_atual = document.getElementById('senha_atual').value.trim();
 
     // Comparando as senhas
-    const campSenhas = await comparar_senhas(senhaAtual);
+    const campSenhas = await comparar_senhas(senha_atual);
 
     // Verificando se as senha foram iguais
     if (campSenhas.erroSenhaAt === 0){
@@ -292,7 +292,8 @@ async function alterarDadosUsuario() {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
-                }
+                },
+                body: JSON.stringify({ senha_atual })
                 })
                 .then(response => response.json())
                 .then(data => {

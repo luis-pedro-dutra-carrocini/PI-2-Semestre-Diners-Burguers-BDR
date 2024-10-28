@@ -26,8 +26,6 @@ async function buscarPedidos() {
             arrayElement.appendChild(pedidosElement);
         });
 
-        alert('busca');
-
     } catch (error) {
         console.error('Erro:', error);
     }

@@ -195,23 +195,16 @@ async function buscarAvaliacoes(){
   arrayElement.innerHTML = '';
 
   // Iterar sobre a lista de avaliacoes e criar elementos para exibi-los
-  dadosAvaliacoes.avaliacoes.forEach(avaliacao => {
+  dadosAvaliacoes.forEach(avaliacao => {
       const produtoElement = document.createElement('div');
       produtoElement.innerHTML = `
           <p>Nota: ${avaliacao.nota}</p>
           <p>Comentário: ${avaliacao.comentario}</p>
-          <p>Data: ${avaliacao.data}</p><br>
+          <p>Data: ${avaliacao.data}</p>
+          <p>Data: ${avaliacao.nomeCliente}</p>
+          <p>Data: ${avaliacao.fotoCliente}</p><br>
       `;
       arrayElement.appendChild(produtoElement);
   });
 
-  // Iterar sobre a lista dos usuários das avaliacoes e criar elementos para exibi-los
-  dadosAvaliacoes.dadosClientes.forEach(cliente => {
-    const produtoElement = document.createElement('div');
-    produtoElement.innerHTML = `
-        <p>Nome: ${cliente.nome}</p>
-        <p>Foto: ${cliente.foto}</p><br>
-    `;
-    arrayElement.appendChild(produtoElement);
-});
 }
