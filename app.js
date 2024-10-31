@@ -35,14 +35,15 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Servir arquivos estáticos (HTML, JS, CSS)
-app.use(express.static('public'));
+// Servir os arquivos estáticos do React
+app.use(express.static(path.join(__dirname, 'frontend'))); // 'frontend' é a pasta `dist` copiada
 
-// Servindo a pasta de imagens
-app.use('/public/imagens/usuarios', express.static('public/imagens/usuarios'));
+// Rotas da API do backend aqui...
 
-// Aplicando o cors
-app.use(cors());
+// Rota wildcard para retornar o `index.html` em qualquer outra rota não capturada
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
 
 // Configura o middleware de sessão antes das rotas
 const sessionMiddleware = require('./middlewares/sessionMiddleware');

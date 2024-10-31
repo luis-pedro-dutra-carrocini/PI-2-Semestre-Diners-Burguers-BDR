@@ -69,7 +69,7 @@ exports.cadastrarUsuario = async (req, res) => {
         req.session.clienteID = ID_Usuario;
 
         // Redirecionando para a página "home_usuario.html"
-        return res.redirect('/home_cliente.html');
+        return res.status(200).json({ cadastro: true });
 
     } catch (error) {
         console.error('Erro no Cadastro do Usuário:', error);
