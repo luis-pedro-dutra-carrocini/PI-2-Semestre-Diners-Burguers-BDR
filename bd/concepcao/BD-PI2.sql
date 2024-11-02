@@ -37,6 +37,7 @@ create table Pedidos(
  Hora_Inicio datetime not null,
  Hora_Fim datetime,
  Tempo_Gasto varchar(15),
+ Endereco_Entrega varchar(100),
  foreign key(ID_Usuario) references Usuarios(ID_Usuario)
 );
 
@@ -61,60 +62,12 @@ create table Pedidos_Produtos(
  ID_Pedido int not null,
  ID_Produto int not null,
  Qt_Produto int not null,
+ Observacao varchar(100),
  foreign key(ID_Pedido) references Pedidos(ID_Pedido),
  foreign key(ID_Produto) references Produtos(ID_Produto),
  constraint PK_PedProd primary key (ID_Pedido,ID_Produto)
 );
 
-# Criando a tabela de Descontos
-create table Descontos(
- ID_Desconto int auto_increment primary key,
- Nome_Desconto varchar(70) not null,
- Descricao_Desconto text not null,
- Aplicacao_Desconto varchar(15) not null,
- Requisito_Ativar double not null,
- Valor_Desconto double not null,
- Percentual_Fixo boolean not null,
- Data_Inicio date not null,
- Data_Termino date not null,
- Desconto_Ativado boolean not null
-);
-
-# Criando a tabela para a relação N para N das tabelas Descontos e Produtos
-create table Produtos_Descontos(
- ID_Desconto int not null,
- ID_Produto int not null,
- foreign key(ID_Desconto) references Descontos(ID_Desconto),
- foreign key(ID_Produto) references Produtos(ID_Produto),
- constraint PK_ProdDesc primary key (ID_Desconto,ID_Produto)
-);
-
-# Criando a tabela Carrinhos do Usuário
-create table Carrinhos(
- ID_Carrinho int auto_increment primary key,
- ID_Usuario int not null,
- Nome_Carrinho varchar(30) not null,
- foreign key(ID_Usuario) references Usuarios(ID_Usuario)
-);
-
-# Criando a tabela para a relação N para N das tabelas Carrinhos e Produtos
-create table Produtos_Carrinhos(
- ID_Carrinho int not null,
- ID_Produto int not null,
- Qt_Produto int not null,
- foreign key(ID_Carrinho) references Carrinhos(ID_Carrinho),
- foreign key(ID_Produto) references Produtos(ID_Produto),
- constraint PK_ProdCar primary key (ID_Carrinho,ID_Produto)
-);
-
-# Criando a tabela de Favoritos
-create table Favoritos(
- ID_Usuario int not null,
- ID_Produto int not null,
- foreign key(ID_Usuario) references Usuarios(ID_Usuario),
- foreign key(ID_Produto) references Produtos(ID_Produto),
- constraint PK_ProdCar primary key (ID_Usuario,ID_Produto)
-);
 
 # Inserindo usuario padrão (Funcionário) para o cadastro dos produtos
 insert into Usuarios (Nome_Usuario, Senha_Usuario, Email_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, Telefone_Usuario) values ('Funcionário 1', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'funcionariodiners1@gmail.com', 'usuario-n', 'funcionario', 'ativo', '(16) 98115-0536');
