@@ -15,42 +15,36 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 * Dados do cliente (Nessa página será exibido os dados do usuário, que foram apresentados durante o seu cadastro, permitindo com que ele os altere ou exclua a sua conta);
 <br>
 
-## 📒 [Documentação do Projeto](https://luis-pedro-dutra-carrocini.github.io/PI-1-Semestre-Diners-Burguers/documentacao/Documentação-PI-1-Semestre.docx)
+## 📒 [Documentação do Projeto](https://luis-pedro-dutra-carrocini.github.io/PI-2-Semestre-Diners-Burguers-BDR/documentacao/2-Semestre/Documentação-PI-2-Semestre.docx)
 <br>
 
 ## 📦 Aparência
 
 ### Página Inicial
-
-<img src="/public/prints/print1.png">
-<img src="/public/prints/print2.png">
-<img src="/public/prints/print3.png">
-<img src="/public/prints/print4.png">
-<img src="/public/prints/print5.png">
-
-### Fazer Pedido
-
-<img src="/public/prints/print6.png">
-<img src="/public/prints/print7.png">
-<img src="/public/prints/print8.png">
-
-### Login e Cadastro
-<img src="/public/prints/print9.png">
-<img src="/public/prints/print10.png">
+<img src="/public/prints/index1.png">
+<img src="/public/prints/index2.png">
+<img src="/public/prints/index3.png">
+<img src="/public/prints/index4.png">
+<img src="/public/prints/index5.png">
 
 ### Sobre nós
-<img src="/public/prints/print11.png">
-<img src="/public/prints/print12.png">
-<img src="/public/prints/print13.png">
+<img src="/public/prints/sebre1.png">
+<img src="/public/prints/sebre2.png">
+<img src="/public/prints/sebre3.png">
+<img src="/public/prints/sebre4.png">
 
-### Cardápio
-<img src="/public/prints/print14.png">
+### Fazer Pedido
+<img src="/public/prints/pedido1.png">
+<img src="/public/prints/pedido2.png">
+<img src="/public/prints/pedido3.png">
+<img src="/public/prints/pedido4.png">
 
-### Contato
-<img src="/public/prints/print15.png">
+### Login e Cadastro
+<img src="/public/prints/login1.png">
+<img src="/public/prints/cadastrar1.png">
+<img src="/public/prints/cadastrar2.png">
 
 ### Responsividade
-
 <img src="/public/prints/print16.png">
 <img src="/public/prints/print17.png">
 <img src="/public/prints/print18.png">
