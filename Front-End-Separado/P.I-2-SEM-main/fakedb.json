@@ -1,0 +1,153 @@
+[
+  {
+    "id": 1,
+    "name": "Diinernífico",
+    "image": "images/burgers/Burger1.png",
+    "category": "Burger",
+    "description": "Pão de brioche, hambúrguer de angus, queijo cheddar, bacon crocante, cebola crispy, alface, tomate, maionese de alho",
+    "tipo": "Um hambúrguer digno dos paladares mais exigentes, uma verdadeira obra-prima.",
+    "price": 28
+  },
+  {
+    "id": 2,
+    "name": "Diiner Tudo",
+    "image": "images/burgers/Burger2.png",
+    "category": "Burger",
+    "description": "Pão artesanal, carne, queijo, bacon, ovo, presunto, alface, tomate, cebola caramelizada, molho especial",
+    "tipo": "Um delicioso hambúrguer para os gostos mais refinados e para os amantes de lanches artesanais.",
+    "price": 25
+  },
+  {
+    "id": 3,
+    "name": "Burger Heaven",
+    "image": "images/burgers/Burger3.png",
+    "category": "Burger",
+    "description": "Pão, carne, queijo, bacon, alface, tomate, maionese",
+    "tipo": "Para os apaixonados por bacon, uma explosão de sabor.",
+    "price": 18
+  },
+  {
+    "id": 4,
+    "name": "Excellent Burgers",
+    "image": "images/burgers/Burger4.png",
+    "category": "Burger",
+    "description": "Pão, carne, queijo, ovo, alface, tomate, maionese",
+    "tipo": "Perfeito para os amantes de ovos e lanches substanciais.",
+    "price": 20
+  },
+  {
+    "id": 5,
+    "name": "All-In Burger",
+    "image": "images/burgers/Burger5.png",
+    "category": "Burger",
+    "description": "Pão, carne, queijo, bacon, ovo, alface, tomate, maionese, milho, ervilha, batata palha",
+    "tipo": "Para os que querem tudo em um só lanche, uma experiência completa.",
+    "price": 21
+  },
+  {
+    "id": 6,
+    "name": "Chicken Delight",
+    "image": "images/burgers/Burger6.png",
+    "category": "Burger",
+    "description": "Pão, filé de frango, queijo, alface, tomate, maionese",
+    "tipo": "Leve e saboroso, perfeito para os amantes de frango.",
+    "price": 25
+  },
+  {
+    "id": 7,
+    "name": "Veggie Kingdom",
+    "image": "images/burgers/Burger7.png",
+    "category": "Burger",
+    "description": "Pão integral, hambúrguer vegano, queijo vegano, alface, tomate, cebola roxa, maionese vegana",
+    "tipo": "Uma opção deliciosa e sustentável para os vegetarianos.",
+    "price": 27
+  },
+  {
+    "id": 8,
+    "name": "Prime Burger",
+    "image": "images/burgers/Burger8.png",
+    "category": "Burger",
+    "description": "Pão, hambúrguer de picanha, queijo, bacon, alface, tomate, maionese",
+    "tipo": "Para os amantes de carnes nobres, uma experiência única.",
+    "price": 30
+  },
+  {
+    "id": 9,
+    "name": "Burger Palace",
+    "image": "images/burgers/Burger9.png",
+    "category": "Burger",
+    "description": "Pão, carne, queijo, alface, tomate, maionese",
+    "tipo": "Um clássico irresistível para qualquer ocasião.",
+    "price": 25
+  },
+  {
+    "id": 10,
+    "name": "Refrigerante",
+    "image": "images/bebidas/refrigerante.png",
+    "category": "Bebida",
+    "description": "Lata de refrigerante (Coca-Cola, Pepsi, Guaraná)",
+    "tipo": "Refrescante e delicioso.",
+    "price": 5
+  },
+  {
+    "id": 11,
+    "name": "Suco Natural",
+    "image": "images/bebidas/suco.png",
+    "category": "Bebida",
+    "description": "Suco natural de laranja, limão ou morango",
+    "tipo": "Opção saudável e refrescante.",
+    "price": 7
+  },
+  {
+    "id": 12,
+    "name": "Milkshake",
+    "image": "images/sobremesas/milkshake.png",
+    "category": "Sobremesa",
+    "description": "Milkshake de baunilha, chocolate ou morango",
+    "tipo": "Uma sobremesa em forma de bebida, perfeita para acompanhar seu lanche.",
+    "price": 10
+  },
+  {
+    "id": 13,
+    "name": "Cerveja Artesanal",
+    "image": "images/bebidas/cervejaartesanal.png",
+    "category": "Bebida",
+    "description": "Cerveja artesanal IPA, Lager ou Stout",
+    "tipo": "Perfeita para acompanhar seu hambúrguer gourmet.",
+    "price": 15
+  },
+  {
+    "id": 14,
+    "name": "Frapuccino",
+    "image": "images/sobremesas/frapuccino.png",
+    "category": "Sobremesa",
+    "description": "Frapuccino de café, chocolate ou caramelo",
+    "tipo": "A sobremesa perfeita para finalizar sua refeição.",
+    "price": 12
+  },
+  {
+    "id": 15,
+    "name": "Sorvete",
+    "image": "images/sobremesas/sorvete.png",
+    "category": "Sobremesa",
+    "description": "Sorvete de chocolate ou flocos",
+    "tipo": "Deliciosamente doce e perfeito para os chocólatras.",
+    "price": 9
+  },
+  {
+    "id": 17,
+    "name": "Cerveja",
+    "image": "images/bebidas/cerveja.png",
+    "category": "Bebida",
+    "description": "Long-neck de cerveja (Heineken, Stella, Colorado)",
+    "price": 10
+  },
+  {
+    "id": 18,
+    "name": "Água",
+    "image": "images/bebidas/agua.png",
+    "category": "Bebida",
+    "description": "Garrafa de água mineral (com ou sem gás)",
+    "price": 4
+  }
+]

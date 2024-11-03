@@ -2,13 +2,17 @@
 // Requerindo o express
 const express = require("express");
 const session = require("express-session");
-
-// Requirindo cors
-const cors = require("cors");
+const path = require('path');
 
 // ---- Configurações APP ---- //
 const app = express();
 app.use(express.json());
+
+// Caso queira executar o Front-End separado do Back-End baixe a pasta Front-End-Separado e execute nela o comando 'npm run dev'
+
+// Requirindo cors
+const cors = require("cors");
+
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
@@ -16,6 +20,17 @@ app.use(
     credentials: true,
   })
 );
+
+
+// Caso queira executar o Back-End junto com o Front-End na mesma pasta
+// Servir os arquivos estáticos do React
+app.use(express.static(path.join(__dirname, 'frontend'))); // 'frontend' é a pasta `dist` copiada
+
+// Rota wildcard para retornar o `index.html` em qualquer outra rota não capturada
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+});
+
 
 // Configura o middleware de sessão antes das rotas
 app.use(
