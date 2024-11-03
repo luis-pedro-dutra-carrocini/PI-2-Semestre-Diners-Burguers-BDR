@@ -26,23 +26,37 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 <img src="/public/prints/index3.png">
 <img src="/public/prints/index4.png">
 <img src="/public/prints/index5.png">
+<br>
 
 ### Sobre nós
 <img src="/public/prints/sebre1.png">
 <img src="/public/prints/sebre2.png">
 <img src="/public/prints/sebre3.png">
 <img src="/public/prints/sebre4.png">
+<br>
 
 ### Fazer Pedido
 <img src="/public/prints/pedido1.png">
 <img src="/public/prints/pedido2.png">
 <img src="/public/prints/pedido3.png">
 <img src="/public/prints/pedido4.png">
+<br>
 
 ### Login e Cadastro
 <img src="/public/prints/login1.png">
 <img src="/public/prints/cadastrar1.png">
 <img src="/public/prints/cadastrar2.png">
+<br>
+
+### Carrinho
+<img src="/public/prints/carrinho1.png">
+<img src="/public/prints/carrinho2.png">
+<img src="/public/prints/carrinho3.png">
+<br>
+
+### Home Cliente
+<img src="/public/prints/home1.png">
+<br>
 
 ### Responsividade
 <img src="/public/prints/print16.png">
@@ -52,7 +66,7 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 
 ## 📃 Obter cópia
 
-Para obter uma cópia basta baixar todos os arquivos presentes nesse repositório, além de executar o código SQL do Banco de Dados em um SGBD (Utilizado foi p MySQL), depois executar o comando "node app.js" no back-end, abrindo em um navagador (Chrome, Edge, FireFox, etc.).
+Para obter uma cópia basta baixar todos os arquivos presentes nesse repositório, além de executar o código SQL do Banco de Dados em um SGBD (Foi utilizado o MySQL), depois executar o comando "node app.js" no back-end, abrindo em um navagador (Chrome, Edge, FireFox, etc.).
 
 
 ## 📋 Pré-requisitos
@@ -81,15 +95,16 @@ Linguagens, Frameworks e API's:
 * JavaScript - Linguagem de Programação
 * CSS - Linguagem Web de Formatação;
 * Node JS - Utilizado no Back-End, fazendo a conexão com o Banco de Dados;
-* API ViaCep - Utilizada para obtenção dos dados de CEP;
 * React - Utilizado para a criação do Front-End;
+* SQL - Utilizado para a criação e interação com o banco de dados;
+* API ViaCep - Utilizada para obtenção dos dados de CEP;
 
 ## ✒️ Autores
 
 * **[João Vitor Luqueti Silva](https://github.com/joaoluquetti)** - *Participação na Documentação do Projeto;*
-* **[Leonardo Henrique Oliveira Cunha](https://github.com/leonardocunha1)** - *Idéia Central; Criação do Front-End; Participação na Documentação do Projeto; Participação no Banco de Dados;*
+* **[Leonardo Henrique Oliveira Cunha](https://github.com/leonardocunha1)** - *Idéia Central; Criação do Front-End; Participação na Documentação do Projeto;*
 * **[Luís Pedro Dutra Carrocini](https://github.com/luis-pedro-dutra-carrocini)** - *Criação do Back-End; Criação do Banco de Dados; Participação na Documentação do Projeto*
-* **[Maria Luiza Barbosa](https://github.com/mluizabss)** - *Figma do Projeto; Documentação do Projeto;*
+* **[Maria Luiza Barbosa](https://github.com/mluizabss)** - *Participação na Documentação do Projeto;*
 * **[Vinícius de Araujo Silva](https://github.com/Viniciussinc)** - *Participação na Documentação do Projeto;*
 
 ## 🎁 Expressões de gratidão
