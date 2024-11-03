@@ -59,9 +59,10 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 <br>
 
 ### Responsividade
-<img src="/public/prints/print16.png">
-<img src="/public/prints/print17.png">
-<img src="/public/prints/print18.png">
+<img src="/public/prints/responsivo1.png">
+<img src="/public/prints/responsivo2.png">
+<img src="/public/prints/responsivo3.png">
+<img src="/public/prints/responsivo4.png">
 <br>
 
 ## 📃 Obter cópia
