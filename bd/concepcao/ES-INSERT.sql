@@ -14,7 +14,9 @@ select * from Produtos;
 
 DELETE FROM Pedidos where ID_Pedido > 0;
 
-DELETE FROM Usuarios where ID_Usuario > 1;
+DELETE FROM Pedidos_Produtos where ID_Pedido > 0;
+
+DELETE FROM Usuarios where ID_Usuario > 4;
 
 SELECT Email_Usuario FROM Usuarios WHERE Email_Usuario = "luis@gmail.com";
 

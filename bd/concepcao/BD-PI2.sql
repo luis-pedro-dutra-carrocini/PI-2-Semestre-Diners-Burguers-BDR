@@ -111,9 +111,9 @@ insert into Produtos (ID_Usuario, Nome_Produto, Descricao_Produto, Composicao_Pr
 
 # Iserindo três Usuários padrões para a exibição de suas Avaliações
 insert into Usuarios (Nome_Usuario, Senha_Usuario, Email_Usuario, Foto_Usuario, Nivel_Usuario, Status_Usuario, Telefone_Usuario) values 
-('João', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'joao@gamil.com', '1727647444256-497557413.jpg', 'cliente', 'ativo', '(16) 99999-9999'),
-('Maria', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'maria@gamil.com', '1727647505453-480266063.jpg', 'cliente', 'ativo', '(16) 88888-8888'),
-('José', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'jose@gamil.com', '1727647562426-777290197.jpg', 'cliente', 'ativo', '(16) 77777-7777');
+('João', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'joao@gmail.com', '1727647444256-497557413.jpg', 'cliente', 'ativo', '(16) 99999-9999'),
+('Maria', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'maria@gmail.com', '1727647505453-480266063.jpg', 'cliente', 'ativo', '(16) 88888-8888'),
+('José', '$10$xKWVIcCmDF0KqUWla9Tv3.FwWsLSdTRWiK24F7EXgb3X30/dRFKua', 'jose@gmail.com', '1727647562426-777290197.jpg', 'cliente', 'ativo', '(16) 77777-7777');
 
 # Senhas = p4$$0W0rb;
 

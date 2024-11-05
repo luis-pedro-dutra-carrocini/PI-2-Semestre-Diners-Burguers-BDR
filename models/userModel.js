@@ -30,6 +30,7 @@ exports.buscarUsuarioPorID = (id) => {
 
 // Função para atualizar os dados do usuário
 exports.alterandoDadosUsuario = (ID_Usuario, nome, senha, email, foto, telefone) => {
+    console.log("Iniciando alteração de dados do Cliente");
     return new Promise((resolve, reject) => {
         const query = `UPDATE Usuarios SET Nome_Usuario = ?, Senha_Usuario = ?, Email_Usuario = ?, 
                        Foto_Usuario = ?, Telefone_Usuario = ? WHERE ID_Usuario = ?`;
@@ -38,7 +39,22 @@ exports.alterandoDadosUsuario = (ID_Usuario, nome, senha, email, foto, telefone)
                 console.error('Erro ao atualizar os dados do usuário:', err);
                 reject(err);
             } else {
-                global.senha_cadastrada = senha;
+                console.log('Dados Alterados');
+                resolve(results);
+            }
+        });
+    });
+};
+
+// Função para verificar se o novo email já está em uso
+exports.novoEmailCadastrado = (email) => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM Usuarios WHERE Email_Usuario = ?';
+        conexao.query(query, [email], (err, results) => {
+            if (err) {
+                console.error('Erro ao buscar Usuário no banco de dados:', err);
+                reject(err);
+            } else {
                 resolve(results);
             }
         });
@@ -70,18 +86,6 @@ exports.excluirUsuario = async (id) => {
             conexao.query(deletarAvaliacao, [id], (err, results) => {
                 if (err) {
                     console.error('Erro ao excluir a avaliação do usuário:', err);
-                    return reject(err);
-                }
-                resolve(results);
-            });
-        });
-
-        // Excluindo favoritos do usuário
-        await new Promise((resolve, reject) => {
-            const deletarFavoritos = 'DELETE FROM Favoritos WHERE ID_Usuario = ?';
-            conexao.query(deletarFavoritos, [id], (err, results) => {
-                if (err) {
-                    console.error('Erro ao excluir os produtos favoritos do usuário:', err);
                     return reject(err);
                 }
                 resolve(results);
@@ -121,45 +125,6 @@ exports.excluirUsuario = async (id) => {
             conexao.query(deletarPedidos, [id], (err, results) => {
                 if (err) {
                     console.error('Erro ao excluir os pedidos do usuário:', err);
-                    return reject(err);
-                }
-                resolve(results);
-            });
-        });
-
-        // Excluindo produtos dos carrinhos do usuário
-        const carrinhosUsuario = await new Promise((resolve, reject) => {
-            const queryCarrinhos = 'SELECT ID_Carrinho FROM Carrinhos WHERE ID_Usuario = ?';
-            conexao.query(queryCarrinhos, [id], (err, results) => {
-                if (err) {
-                    console.error('Erro ao buscar os carrinhos do usuário:', err);
-                    return reject(err);
-                }
-                resolve(results);
-            });
-        });
-
-        await Promise.all(
-            carrinhosUsuario.map(carrinho => {
-                return new Promise((resolve, reject) => {
-                    const deletarProdutosCarrinho = 'DELETE FROM Produtos_Carrinhos WHERE ID_Carrinho = ?';
-                    conexao.query(deletarProdutosCarrinho, [carrinho.ID_Carrinho], (err, results) => {
-                        if (err) {
-                            console.error('Erro ao excluir os produtos dos carrinhos do usuário:', err);
-                            return reject(err);
-                        }
-                        resolve(results);
-                    });
-                });
-            })
-        );
-
-        // Excluindo carrinhos do usuário
-        await new Promise((resolve, reject) => {
-            const deletarCarrinhos = 'DELETE FROM Carrinhos WHERE ID_Usuario = ?';
-            conexao.query(deletarCarrinhos, [id], (err, results) => {
-                if (err) {
-                    console.error('Erro ao excluir os carrinhos do usuário:', err);
                     return reject(err);
                 }
                 resolve(results);

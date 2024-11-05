@@ -30,7 +30,7 @@ exports.cadastrarUsuario = async (req, res) => {
   const { nome, email, telefone, senha_cadastro } = req.body;
   const nivel = 'cliente';
   const status = 'ativo';
-  const foto = req.file ? req.file.filename : null;
+  const foto = req.file ? req.file.filename : 'usuario-n.png';
 
   try {
       // Verificação se email já não está cadastrado
@@ -109,7 +109,7 @@ exports.verificarLogin = async (req, res) => {
   }
 
   conexao.query(
-    "SELECT ID_Usuario, Senha_Usuario FROM Usuarios WHERE Email_Usuario = ?;",
+    "SELECT * FROM Usuarios WHERE Email_Usuario = ?;",
     [email],
     async (err, results) => {
       if (err) {
@@ -136,6 +136,7 @@ exports.verificarLogin = async (req, res) => {
             email: email,
             nivel: nivel,
             status: status,
+            senha: senha_bd
           };
           return res.status(200).json({ validacao: true });
         } else {
@@ -174,6 +175,8 @@ exports.verificarSessao = async (req, res) => {
             nome: results[0].Nome_Usuario,
             email: results[0].Email_Usuario,
             foto: results[0].Foto_Usuario,
+            telefone: results[0].Telefone_Usuario,
+            senha: results[0].Senha_Usuario
           },
         });
       } else {
@@ -219,7 +222,7 @@ exports.buscarDadosCliente = async (req, res) => {
     const results = await userModel.buscarUsuarioPorID(ID_Cliente);
 
     if (results.length > 0) {
-      global.senha_cadastrada = results[0].Senha_Usuario;
+      req.session.cliente.senha = results[0].Senha_Usuario;
 
       return res.status(200).json({
         existe: true,
@@ -250,7 +253,7 @@ exports.sairConta = (req, res) => {
     return res.status(200).json({ resultado: true });
   }
 
-  global.senha_cadastrada = "";
+  req.session.cliente.senha = "";
 
   req.session.destroy((err) => {
     if (err) {
@@ -276,7 +279,7 @@ exports.compararSenhas = async (req, res) => {
   try {
     const resultado = await bcrypt.compare(
       senha_atual,
-      global.senha_cadastrada
+      req.session.cliente.senha
     );
     console.log("Senhas Iguais: ", resultado);
     return res.status(200).json({ resultado });
@@ -288,40 +291,75 @@ exports.compararSenhas = async (req, res) => {
 
 // Função para alterar os dados do cliente
 exports.alterarDadosUsuario = async (req, res) => {
+  // Obtendo os dados do formulário
   const {
     nome,
     email,
     telefone,
     senha_nova,
-    alterar_senha,
-    senha_atual,
-    img_removida,
+    senha_atual
   } = req.body;
-  const ID_Cliente = req.session.cliente.id;
 
-  console.log("Iniciando alteração de dados do Cliente");
+  // Obtendo o ID e Senha Cadastrada pela sessão
+  const ID_Cliente = req.session.cliente.id;
+  const senha_cadastrada = req.session.cliente.senha;
+
+  // Definindo a imagem como nula, pois não haverá interações de imagens com BD nesse semestre
+  const img_removida = 'nula';
+
+  // Verificando se será necessário alterar a senha
+  const alterar_senha = senha_nova !== ''
 
   try {
+
+    // Verificando se as senha são iguais
+    const resultado = await bcrypt.compare(
+      senha_atual,
+      senha_cadastrada
+    );
+
+    // Validando resultado
+    if (!resultado) {
+      console.log('Senha Inválida.')
+      return res.status(404).json({ message: "Senha Inválida!" });
+    }
+
+    // Verificando se o usuário está cadastrado
     const user = await userModel.buscarUsuarioPorID(ID_Cliente);
     if (!user || user.length === 0) {
       console.log("Usuário não encontrado.");
       return res.status(404).json({ message: "Usuário não encontrado." });
     }
 
-    const userData = user[0];
-
-    const senha_usuario = alterar_senha === "sim" ? senha_nova : senha_atual;
-
-    const resultado = await bcrypt.compare(
-      senha_atual,
-      global.senha_cadastrada
-    );
-    if (!resultado) {
-      return res.status(200).json({ message: "Senha Inválida!" });
+    console.log(email);
+    console.log(req.session.cliente.email);
+    // Verificando se o novo email já está em uso
+    if (email !== req.session.cliente.email){
+      const emailCad = await userModel.novoEmailCadastrado(email);
+      if (emailCad.length != 0) {
+        console.log("Email já está em uso.");
+        return res.status(404).json({ message: "Email já está em uso." });
+      }
     }
 
+    // Definindo variavel padrão
+    const userData = user[0];
+    let senhaHash = '';
+
+    console.log(alterar_senha);
+
+    // verificando se a senha será alterada
+    if (alterar_senha == true){
+      const saltRounds = 10;
+      senhaHash = await bcrypt.hash(senha_nova, saltRounds);
+    }else{
+      senhaHash = senha_cadastrada;
+    }
+
+    // Mantendo o valor da foto cadastrada
     let foto = req.file ? req.file.filename : userData.Foto_Usuario;
 
+    // Mantendo ou removendo a imagem na pasta de usuários
     if (img_removida === "nula") {
       console.log("Foto Nula");
       foto = "usuario-n.png";
@@ -350,10 +388,8 @@ exports.alterarDadosUsuario = async (req, res) => {
       }
     }
 
-    const saltRounds = 10;
-    const senhaHash = await bcrypt.hash(senha_usuario, saltRounds);
-
-    await userModel.alterandoDadosUsuario(
+    // Alterando os dados
+    const alterarDados = await userModel.alterandoDadosUsuario(
       ID_Cliente,
       nome,
       senhaHash,
@@ -362,7 +398,13 @@ exports.alterarDadosUsuario = async (req, res) => {
       telefone
     );
 
-    res.redirect("/dados_cliente.html");
+    if (!alterarDados){
+      console.log('rro ao alterar os dados.')
+      return res.status(404).json({ message: "Erro ao alterar os dados." })
+    }else{
+      return res.status(200).json({ message: "Dados Alterados." });
+    }
+
   } catch (err) {
     console.error("Erro ao alterar os dados do Usuário:", err);
     res.status(500).json({ message: "Erro ao alterar os dados do Usuário." });
@@ -377,15 +419,16 @@ exports.excluirConta = async (req, res) => {
   try {
     const user = await userModel.buscarFotoUsuario(ID_Cliente);
     if (!user) {
+      console.log('Usuário não encontrado');
       return res.status(404).json({ message: "Usuário não encontrado." });
     }
 
     const resultado = await bcrypt.compare(
       senha_atual,
-      global.senha_cadastrada
+      req.session.cliente.senha
     );
     if (!resultado) {
-      return res.status(200).json({ message: "Senha Inválida!" });
+      return res.status(404).json({ message: "Senha Inválida!" });
     }
 
     if (user.Foto_Usuario != "usuario-n.png") {
