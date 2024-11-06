@@ -5,7 +5,6 @@ const axios = require("axios");
 
 // Função para cadastrar o pedido do cliente
 exports.cadastrarPedido = async (req, res) => {
-  // console.log(req.body);
 
   const {
     isDelivery: entregaNecessaria,

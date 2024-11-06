@@ -95,7 +95,7 @@ insert into Produtos (ID_Usuario, Nome_Produto, Descricao_Produto, Composicao_Pr
 
 (1, 'Refrigerante', 'Refrescante e delicioso.', 'Lata de refrigerante (Coca-Cola, Pepsi, Guaraná).', 'Bebida', 'images/bebidas/refrigerante.png', 5, 100, 0),
 
-(1, 'Refrigerante', 'Opção saudável e refrescante.', 'Suco natural de laranja, limão ou morango.', 'Bebida', 'images/bebidas/suco.png', 7, 100, 0),
+(1, 'Suco de Laranja', 'Opção saudável e refrescante.', 'Suco natural de laranja, limão ou morango.', 'Bebida', 'images/bebidas/suco.png', 7, 100, 0),
 
 (1, 'Milkshake', 'Uma sobremesa em forma de bebida, perfeita para acompanhar seu lanche.', 'Milkshake de baunilha, chocolate ou morango', 'Sobremesa', 'images/sobremesas/milkshake.png', 10, 100, 0),
 
@@ -103,7 +103,7 @@ insert into Produtos (ID_Usuario, Nome_Produto, Descricao_Produto, Composicao_Pr
 
 (1, 'Frapuccino', 'A sobremesa perfeita para finalizar sua refeição.', 'Frapuccino de café, chocolate ou caramelo.', 'Sobremesa', 'images/sobremesas/frapuccino.png', 12, 100, 0),
 
-(1, 'Sorvete', 'Deliciosamente doce e perfeito para os chocólatras.', 'Sorvete de chocolate ou flocos.', 'Sobremesa', 'images/sobremesas/frapuccino.png', 9, 100, 0),
+(1, 'Sorvete', 'Deliciosamente doce e perfeito para os chocólatras.', 'Sorvete de chocolate ou flocos.', 'Sobremesa', 'images/sobremesas/sorvete.png', 9, 100, 0),
 
 (1, 'Cerveja', 'Perfeita para acompanhar seu hambúrguer.', 'Long-neck de cerveja (Heineken, Stella, Colorado).', 'Bebida', 'images/bebidas/cerveja.png', 10, 100, 0),
 

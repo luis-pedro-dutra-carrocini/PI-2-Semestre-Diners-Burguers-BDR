@@ -144,7 +144,6 @@ exports.excluirUsuario = async (id) => {
         });
 
         console.log("Usuário e todos os dados relacionados excluídos com sucesso.");
-        return { success: true };
         
     } catch (error) {
         console.error('Erro ao excluir a conta do usuário:', error);

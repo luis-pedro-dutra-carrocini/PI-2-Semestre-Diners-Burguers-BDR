@@ -445,7 +445,17 @@ exports.excluirConta = async (req, res) => {
 
     await userModel.excluirUsuario(ID_Cliente);
 
-    res.status(200).json({ excluiu: true });
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Erro ao encerrar a Sessão:", err);
+        return res.status(500).json({ message: "Erro ao encerrar a Sessão." });
+      }
+
+      console.log("Sessão Encerrada");
+      res.clearCookie("connect.sid");
+      return res.status(200).json({ resultado: true });
+    });
+    
   } catch (err) {
     console.error("Erro ao excluir a conta do usuário:", err);
     res.status(500).json({ message: "Erro ao excluir a conta." });
