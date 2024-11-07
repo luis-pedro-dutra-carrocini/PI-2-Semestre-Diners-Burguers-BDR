@@ -18,6 +18,12 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 ## 📒 [Documentação do Projeto](https://luis-pedro-dutra-carrocini.github.io/PI-2-Semestre-Diners-Burguers-BDR/documentacao/2-Semestre/Documentação-PI-2-Semestre.docx)
 <br>
 
+## 🎬​ [Vídeo Explicativo](https://https://www.youtube.com/)
+<br>
+
+## 🎬​ [Repositório Front-End](https://github.com/leonardocunha1/P.I-2-SEM)
+<br>
+
 ## 📦 Aparência
 
 ### Página Inicial
@@ -55,7 +61,9 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 <br>
 
 ### Home Cliente
-<img src="/public/prints/home1.png">
+<img src="/public/prints/dadoscliente1.png">
+<img src="/public/prints/dadoscliente2.png">
+<img src="/public/prints/dadoscliente3.png">
 <br>
 
 ### Responsividade
@@ -67,7 +75,7 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 
 ## 📃 Obter cópia
 
-Para obter uma cópia basta baixar todos os arquivos presentes nesse repositório, além de executar o código SQL do Banco de Dados em um SGBD (Foi utilizado o MySQL), depois executar o comando "node app.js" no back-end, abrindo em um navagador (Chrome, Edge, FireFox, etc.).
+Para obter uma cópia basta baixar todos os arquivos presentes nesse repositório, além de executar o código SQL do Banco de Dados em um SGBD (Foi utilizado o MySQL), depois executar o comando "npm start" no terminal do back-end, abrindo em um navagador (Chrome, Edge, FireFox, etc.) a URL "http://localhost:3000/home".
 
 
 ## 📋 Pré-requisitos
@@ -78,10 +86,11 @@ Para que o site possa apresentar pleno funcionamento é necessário um navegador
 ## 🔧 Instalação
 
 * Baixe os arquivos e pastas contidas nesse repositório e os coloque em uma pasta;
-* Execute o código do Banco de Dados (BD-PI2.sql) em um SGBD (Sistema Gerenciador de Banco de Dados), Online ou Local - Recomendável o MySQL;
+* Execute o código do Banco de Dados (BD-PI2.sql) em um SGBD (Sistema Gerenciador de Banco de Dados), Online ou Local - Recomendável o MySQL Local;
 * Obtenha acesso a Internet;
 * Deixe ativado o JavaScript no seu navegador;
-* Execute no terminal do repositório o comando "node app.js";
+* Execute no terminal do repositório o comando "npm start";
+* Abra um navegador na URL "http://localhost:3000/home" para verificar se o site está rodando na máquina;
 
 ## 🛠️ Construído com
 
