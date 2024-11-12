@@ -16,12 +16,12 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 <br>
 
 ## 📒 [Documentação do Projeto](https://luis-pedro-dutra-carrocini.github.io/PI-2-Semestre-Diners-Burguers-BDR/documentacao/2-Semestre/Documentação-PI-2-Semestre.docx)
-<br>
+
+## 📲​ [Protótipo (Baixa Fidelidade)](https://www.figma.com/design/uIpIFFDCjYxx9bZYfrCEXs/Diiner's-baixa-fidelidade---2-Semestre?node-id=0-1&node-type=canvas&t=OJCq2ApnJBPXnJSd-0)
 
 ## 🎬​ [Vídeo Explicativo](https://https://www.youtube.com/)
-<br>
 
-## 🎬​ [Repositório Front-End](https://github.com/leonardocunha1/P.I-2-SEM)
+## 💾​​ [Repositório Front-End](https://github.com/leonardocunha1/P.I-2-SEM)
 <br>
 
 ## 📦 Aparência
