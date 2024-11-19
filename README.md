@@ -15,9 +15,9 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 * Dados do cliente (Nessa página será exibido os dados do usuário, que foram apresentados durante o seu cadastro, permitindo com que ele os altere ou exclua a sua conta);
 <br>
 
-## 📒 [Documentação do Projeto](https://luis-pedro-dutra-carrocini.github.io/PI-2-Semestre-Diners-Burguers-BDR/documentacao/2-Semestre/Documentação-PI-2-Semestre.docx)
+## 📒 [Documentação do Projeto](https://luis-pedro-dutra-carrocini.github.io/PI-2-Semestre-Diners-Burguers-BDR/documentacao/2-Semestre/Documentação-PI-2-Semestre.pdf)
 
-## 📲​ [Protótipo (Baixa Fidelidade)](https://www.figma.com/design/uIpIFFDCjYxx9bZYfrCEXs/Diiner's-baixa-fidelidade---2-Semestre?node-id=0-1&node-type=canvas&t=OJCq2ApnJBPXnJSd-0)
+## 📲​ [Protótipo (Baixa Fidelidade)](https://www.figma.com/proto/uIpIFFDCjYxx9bZYfrCEXs/Diiner's-baixa-fidelidade---2-Semestre?node-id=4108-27&starting-point-node-id=4108%3A27&t=zG3bwDcrvDA4JsYO-1)
 
 ## 🎬​ [Vídeo Explicativo](https://https://www.youtube.com/)
 
