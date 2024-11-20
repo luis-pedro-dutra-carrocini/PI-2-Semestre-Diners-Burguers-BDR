@@ -1,6 +1,6 @@
 # PI 2° Semestre - Diner's Burguers (Um site para uma Hamburgueria) - Com Banco de Dados Relacional
 
-Esse projeto é o segundo PI (Projeto Interdisciplinar) do curso DSM (Desenvolvimento de Softwares Multi-Plataformas) da Faculdade de Tecnologia Fatec Franca Dr. Thomaz Novelino, sendo uma continuação do primeiro PI. Seu intuito é unir os conhecimentos adquiridos nas principais disciplinas do segundo semestre, Engenharia de Software II, Banco de Dados Relacional e Desenvolvimento Web II, criando um site de vendas uma hamburgueria fictícia. Sendo desenvolvido com as linguagens HTML5, CSS3, JavaScript, MySQL, além de Node JS e React, sendo a parte visual e funcional do sistema.
+Esse projeto é o PI (Projeto Interdisciplinar) do segundo semestre do curso DSM (Desenvolvimento de Softwares Multi-Plataformas) da Faculdade de Tecnologia Fatec Franca Dr. Thomaz Novelino, sendo uma continuação do PI de primeiro semestre. Seu intuito é unir os conhecimentos adquiridos nas principais disciplinas do segundo semestre (Engenharia de Software II, Banco de Dados Relacional e Desenvolvimento Web II), criando um site de vendas de uma hamburgueria fictícia. Sendo desenvolvido com as linguagens HTML5, CSS3, JavaScript, MySQL, além de Node JS e React, sendo a parte visual e funcional do sistema.
 
 ## 📄 Descrição
 
@@ -19,7 +19,7 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 
 ## 📲​ [Protótipo (Baixa Fidelidade)](https://www.figma.com/proto/uIpIFFDCjYxx9bZYfrCEXs/Diiner's-baixa-fidelidade---2-Semestre?node-id=4108-27&starting-point-node-id=4108%3A27&t=zG3bwDcrvDA4JsYO-1)
 
-## 🎬​ [Vídeo Explicativo](https://https://www.youtube.com/)
+## 🎬​ [Vídeo Explicativo](https://youtu.be/FLwrav0yVTk?si=np5CKvJh_TK65hyb)
 
 ## 💾​​ [Repositório Front-End](https://github.com/leonardocunha1/P.I-2-SEM)
 <br>
@@ -75,7 +75,7 @@ O site apresenta as seguintes páginas, com as seguintes funções:
 
 ## 📃 Obter cópia
 
-Para obter uma cópia basta baixar todos os arquivos presentes nesse repositório, além de executar o código SQL do Banco de Dados em um SGBD (Foi utilizado o MySQL), depois executar o comando "npm start" no terminal do back-end, abrindo em um navagador (Chrome, Edge, FireFox, etc.) a URL "http://localhost:3000/home".
+Para obter uma cópia basta baixar todos os arquivos presentes nesse repositório, além de executar o código SQL do Banco de Dados em um SGBD (Foi utilizado o MySQL), depois executar o comando "npm start" no terminal do back-end, abrindo em um navagador (Chrome, Edge, FireFox, etc.) a URL http://localhost:3000/home.
 
 
 ## 📋 Pré-requisitos
@@ -90,7 +90,7 @@ Para que o site possa apresentar pleno funcionamento é necessário um navegador
 * Obtenha acesso a Internet;
 * Deixe ativado o JavaScript no seu navegador;
 * Execute no terminal do repositório o comando "npm start";
-* Abra um navegador na URL "http://localhost:3000/home" para verificar se o site está rodando na máquina;
+* Abra um navegador na URL http://localhost:3000/home para verificar se o site está rodando na máquina;
 
 ## 🛠️ Construído com
 
@@ -113,7 +113,7 @@ Linguagens, Frameworks e API's:
 
 * **[João Vitor Luqueti Silva](https://github.com/joaoluquetti)** - *Participação na Documentação do Projeto;*
 * **[Leonardo Henrique Oliveira Cunha](https://github.com/leonardocunha1)** - *Idéia Central; Criação do Front-End; Participação na Documentação do Projeto;*
-* **[Luís Pedro Dutra Carrocini](https://github.com/luis-pedro-dutra-carrocini)** - *Criação do Back-End; Criação do Banco de Dados; Participação na Documentação do Projeto*
+* **[Luís Pedro Dutra Carrocini](https://github.com/luis-pedro-dutra-carrocini)** - *Criação do Back-End; Criação do Banco de Dados; Documentação do Projeto*
 * **[Maria Luiza Barbosa](https://github.com/mluizabss)** - *Participação na Documentação do Projeto;*
 * **[Vinícius de Araujo Silva](https://github.com/Viniciussinc)** - *Participação na Documentação do Projeto;*
 
